@@ -8,21 +8,25 @@ class BusTest {
     Motorbike bike1 = new Motorbike();
 
     @Test
-    void testCarLength() {
-        assertEquals(4.5, car1.length);
-        assertEquals(2.25, car1.breadth);
+    void testCar() {
+        assertEquals("car_000", car1.getId());
+        assertEquals(4.5, car1.getLength());
+        assertEquals(2.25, car1.getBreadth());
     }
 
     @Test
-    void testBusLength() {
-        assertEquals(13.5, bus1.length);
-        assertEquals(2.25, bus1.breadth);
+    void testBus() {
+        assertEquals("bus_000", bus1.getId());
+        assertEquals(13.5, bus1.getLength());
+        assertEquals(2.25, bus1.getBreadth());
     }
 
     @Test
-    void testMotorbikeLength() {
-        assertEquals(2.25, bike1.length);
-        assertEquals(2.25, bike1.breadth);
+    void testMotorbike() {
+        assertEquals("bike_000", bike1.getId());
+        assertEquals(2.25, bike1.getLength());
+        assertEquals(2.25, bike1.getBreadth());
     }
+
 
 }
