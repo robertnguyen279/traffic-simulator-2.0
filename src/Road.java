@@ -11,7 +11,7 @@ public class Road {
         this.speedLimit = 1;
         this.length = length;
         this.startLocation = startLocation;
-        endLocation = new int[]{this.length + this.startLocation[0], 0}; //only works for horizontal roads
+        endLocation = new int[]{this.length + this.startLocation[0], 0}; //only works for horizontal roads;
     }
 
     public String getId() {
@@ -38,19 +38,28 @@ public class Road {
         this.length = length;
     }
 
-    public int[] getStartLocation() {
-        return startLocation;
+    public String printStartLocation() {
+        return startLocation[0] + "," + startLocation[1];
     }
 
     public void setStartLocation(int[] startLocation) {
         this.startLocation = startLocation;
     }
 
-    public int[] getEndLocation() {
-        return endLocation;
+    public String printEndLocation() {
+        endLocation = new int[]{this.length + this.startLocation[0], 0}; //only works for horizontal roads;
+        return endLocation[0] + "," + endLocation[1];
     }
 
     public void setEndLocation(int[] endLocation) {
         this.endLocation = endLocation;
+    }
+
+    public int[] getStartLocation() {
+        return startLocation;
+    }
+
+    public int[] getEndLocation() {
+        return endLocation;
     }
 }

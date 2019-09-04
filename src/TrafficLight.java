@@ -2,13 +2,12 @@ public class TrafficLight {
     private String id;
     private String state;
     private int[] location;
-    private String road;
+    private int road;
 
-    public TrafficLight(String id, int[] location, String road) {
+    public TrafficLight(String id) {
         this.id = id;
-        this.location = location;
-        this.road = road;
         state = "green";
+        location = new int[2];
     }
 
     public String getState() {
@@ -19,19 +18,19 @@ public class TrafficLight {
         this.state = state;
     }
 
-    public int[] getLocation() {
-        return location;
+    public String printLocation() {
+        return location[0] + "," + location[1];
     }
 
     public void setLocation(int[] location) {
         this.location = location;
     }
 
-    public String getRoad() {
+    public int getRoad() {
         return road;
     }
 
-    public void setRoad(String road) {
+    public void setRoad(int road) {
         this.road = road;
     }
 
@@ -41,5 +40,9 @@ public class TrafficLight {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public int[] getLocation() {
+        return location;
     }
 }
