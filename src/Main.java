@@ -25,18 +25,19 @@ public class Main {
         System.out.println("Object Creation:");
         ArrayList<Road> roads = new ArrayList<>();
         for (int i = 0; i < roadSpawns; i++) {
-            roads.add(new Road("road_" + (i + 1), 1, 3, new int[]{0, 0}));
+            roads.add(new Road(Integer.toString(i), 1, 3, new int[]{0, 0}));
             System.out.printf("%s limit of:%dm/s at location:%s to %s%n", roads.get(i).getId(), roads.get(i).getSpeedLimit(), roads.get(i).printStartLocation(), roads.get(i).printEndLocation());
         }
         ArrayList<Car> cars = new ArrayList<>();
         for (int i = 0; i < carSpawns; i++) {
-            cars.add(new Car("car_" + (i + 1)));
-            System.out.printf("%s going:%dm/s at location:%s%n", cars.get(i).getId(), cars.get(i).getSpeed(), cars.get(i).printLocation());
+            cars.add(new Car(Integer.toString(i), roads.get(0)));
+            cars.get(i).printCar();
         }
+
         ArrayList<TrafficLight> lights = new ArrayList<>();
         for (int i = 0; i < lightSpawns; i++) {
-            lights.add(new TrafficLight("light_" + (i + 1)));
-            System.out.printf("%s is:%s at location:%s%n", lights.get(i).getId(), lights.get(i).getState(), lights.get(i).printLocation());
+            lights.add(new TrafficLight(Integer.toString(i)));
+            System.out.printf("%s is:%s at location:%s%n", lights.get(i).getId(), lights.get(i).getState(), lights.get(i).getLocation());
         }
         System.out.println();
 
@@ -45,12 +46,11 @@ public class Main {
         System.out.println("Settings:");
         roads.get(1).setStartLocation(new int[]{4, 0});
         System.out.printf("%s limit of:%dm/s set to location:%s to %s%n", roads.get(1).getId(), roads.get(1).getSpeedLimit(), roads.get(1).printStartLocation(), roads.get(1).printEndLocation());
-        lights.get(0).setRoad(0);
-        lights.get(0).setLocation(roads.get(lights.get(0).getRoad()).getEndLocation());
-        System.out.printf("%s is:%s set to location:%s%n", lights.get(0).getId(), lights.get(0).getState(), lights.get(0).printLocation());
-        cars.get(0).setRoad(0);
-        cars.get(0).setSpeed(roads.get(cars.get(0).getRoad()).getSpeedLimit());
         System.out.println();
+        cars.get(0).setRoad(roads.get(0)); // set car 0s road
+        roads.get(0).getConnectedRoads().add(roads.get(1));
+        System.out.println(roads.get(0).getConnectedRoads().get(0).getId());
+
 
         //Simulation loop:
         System.out.println("Start Simulation?(y)");
@@ -62,19 +62,8 @@ public class Main {
                 turn = turn + 1;
                 for (int i = 0; i < carSpawns; i++) {
                     Car currentCar = cars.get(i);
-                    if (currentCar.getLocation()[0] < roads.get(currentCar.getRoad()).getEndLocation()[0]) {
-                        currentCar.setLocation(new int[]{currentCar.getLocation()[0] + currentCar.getSpeed(), 0});
-                    } else if (currentCar.getLocation()[0] == roads.get(currentCar.getRoad()).getEndLocation()[0]) {
-                        for (int x = 0; x < roadSpawns; x++) {
-                            int roadStart = roads.get(x).getStartLocation()[0];
-                            if (currentCar.getLocation()[0] == roadStart - 1) {
-                                currentCar.setRoad(x);
-                                currentCar.setLocation(new int[]{currentCar.getLocation()[0] + currentCar.getSpeed(), 0});
-                            }
-                        }
-
-                    }
-                    System.out.printf("%s going:%dm/s on road_%s at location:%s%n", currentCar.getId(), currentCar.getSpeed(), currentCar.getRoad(), currentCar.printLocation());
+                    currentCar.move();
+                    currentCar.printCar();
 
                 }
 

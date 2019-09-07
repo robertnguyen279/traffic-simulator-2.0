@@ -2,18 +2,30 @@ public class Car {
     String id; // unique identifier
     float length = 1f; // number of segments occupied, more for graphical representation, 1 for ease of prototype.
     private int speed = 0; //segments moved per turn
-    private int[] location; // current segment
-    private int road; // current road object
+    private int position; // current segment
+    private Road road; // current road object
     private float breadth = length * 0.5f;
 
-    public Car() {
-        id = "car_000";
-        location = new int[2];
+    public Car(String id, Road road) {
+        this.id = "car_" + id;
+        this.road = road;
+        position = 0;
     }
 
-    public Car(String id) {
-        this.id = id;
-        location = new int[2];
+    public void move() {
+        this.setSpeed(this.road.getSpeedLimit()); //set speed limit to that of current road
+        if (this.road.getLength() == this.getPosition() && !this.road.getConnectedRoads().isEmpty()) {
+            this.setRoad(this.road.getConnectedRoads().get(0));
+            this.setPosition(0);
+        } else if (this.road.getLength() > this.getPosition()) {
+            this.setPosition(this.getPosition() + this.getSpeed());
+        } else {
+            this.setSpeed(0);
+        }
+    }
+
+    public void printCar() {
+        System.out.printf("%s going:%dm/s on %s at location:%s%n", this.getId(), this.getSpeed(), this.getRoad().getId(), this.getPosition());
     }
 
     public float getLength() {
@@ -40,23 +52,19 @@ public class Car {
         this.speed = speed;
     }
 
-    public String printLocation() {
-        return location[0] + "," + location[1];
+    public int getPosition() {
+        return position;
     }
 
-    public void setLocation(int[] location) {
-        this.location = location;
+    public void setPosition(int position) {
+        this.position = position;
     }
 
-    public int[] getLocation() {
-        return location;
-    }
-
-    public int getRoad() {
+    public Road getRoad() {
         return road;
     }
 
-    public void setRoad(int road) {
+    public void setRoad(Road road) {
         this.road = road;
     }
 
