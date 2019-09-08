@@ -25,7 +25,7 @@ public class Main {
         System.out.println("Object Creation:");
         ArrayList<Road> roads = new ArrayList<>();
         for (int i = 0; i < roadSpawns; i++) {
-            roads.add(new Road(Integer.toString(i), 1, 3, new int[]{0, 0}));
+            roads.add(new Road(Integer.toString(i), 1, 5, new int[]{0, 0}));
             System.out.printf("%s limit of:%dm/s at location:%s to %s%n", roads.get(i).getId(), roads.get(i).getSpeedLimit(), roads.get(i).printStartLocation(), roads.get(i).printEndLocation());
         }
         ArrayList<Car> cars = new ArrayList<>();
@@ -53,26 +53,21 @@ public class Main {
 
 
         //Simulation loop:
-        System.out.println("Start Simulation?(y)");
-        String answer = simController.nextLine();
-        answer = answer.toLowerCase();
-        if (answer.equals("y")) {
+        System.out.println("Simulation:");
+        for (Car car : cars
+        ) {
             do {
-                turn = turn + 1;
-                for (int i = 0; i < carSpawns; i++) {
-                    Car currentCar = cars.get(i);
-                    TrafficLight currentLight = lights.get(i);
-                    currentLight.operate();
-                    currentLight.printLight();
-                    currentCar.move();
-                    currentCar.printCar();
+                for (TrafficLight light : lights
+                ) {
+                    light.operate();
+                    light.printLight();
                 }
-
-
-                System.out.println("Sim turn = " + turn + "\nContinue Sim?(y)");
-                answer = simController.nextLine();
-                answer = answer.toLowerCase();
-            } while (answer.equals("y"));
+                car.move();
+                car.printCar();
+                System.out.println();
+            } while (!car.getRoad().getConnectedRoads().isEmpty() || (car.getSpeed() > 0));
         }
+
+
     }
 }
