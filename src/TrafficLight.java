@@ -1,13 +1,30 @@
 public class TrafficLight {
+    private static final double CHANGE_GREEN = 0.5;
+    private static final String GREEN = "green";
+    private static final String RED = "red";
     private String id;
     private String state;
-    private int[] location;
-    private int road;
+    private int position;
+    private Road road;
 
-    public TrafficLight(String id) {
-        this.id = id;
+    public TrafficLight(String id, Road road) {
+        this.id = "light_" + id;
         state = "green";
-        location = new int[2];
+        this.road = road;
+        position = this.road.getLength(); // always places the traffic light at the end of the road.
+    }
+
+    public void operate() {
+        double probability = Math.random();
+        if (probability > CHANGE_GREEN) {
+            this.setState(GREEN);
+        } else {
+            this.setState(RED);
+        }
+    }
+
+    public void printLight() {
+        System.out.printf("%s is:%s on %s at position:%s%n", this.getId(), this.getState(), this.getRoad().getId(), this.getPosition());
     }
 
     public String getState() {
@@ -18,20 +35,16 @@ public class TrafficLight {
         this.state = state;
     }
 
-    public String printLocation() {
-        return location[0] + "," + location[1];
-    }
-
-    public void setLocation(int[] location) {
-        this.location = location;
-    }
-
-    public int getRoad() {
+    public Road getRoad() {
         return road;
     }
 
-    public void setRoad(int road) {
+    public void setRoad(Road road) {
         this.road = road;
+    }
+
+    public int getPosition() {
+        return position;
     }
 
     public String getId() {
@@ -42,7 +55,7 @@ public class TrafficLight {
         this.id = id;
     }
 
-    public int[] getLocation() {
-        return location;
+    public void setPosition(int position) {
+        this.position = position;
     }
 }

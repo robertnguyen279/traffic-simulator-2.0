@@ -14,18 +14,23 @@ public class Car {
 
     public void move() {
         this.setSpeed(this.road.getSpeedLimit()); //set speed limit to that of current road
-        if (this.road.getLength() == this.getPosition() && !this.road.getConnectedRoads().isEmpty()) {
-            this.setRoad(this.road.getConnectedRoads().get(0));
-            this.setPosition(0);
-        } else if (this.road.getLength() > this.getPosition()) {
-            this.setPosition(this.getPosition() + this.getSpeed());
-        } else {
+        if (!this.road.getLights().isEmpty() && this.position == this.road.getLights().get(0).getPosition() && this.road.getLights().get(0).getState().equals("red")) {
             this.setSpeed(0);
+        } else {
+            this.setSpeed(this.road.getSpeedLimit());
+            if (this.road.getLength() == this.getPosition() && !this.road.getConnectedRoads().isEmpty()) {
+                this.setRoad(this.road.getConnectedRoads().get(0));
+                this.setPosition(0);
+            } else if (this.road.getLength() > this.getPosition()) {
+                this.setPosition(this.getPosition() + this.getSpeed());
+            } else {
+                this.setSpeed(0);
+            }
         }
     }
 
     public void printCar() {
-        System.out.printf("%s going:%dm/s on %s at location:%s%n", this.getId(), this.getSpeed(), this.getRoad().getId(), this.getPosition());
+        System.out.printf("%s going:%dm/s on %s at position:%s%n", this.getId(), this.getSpeed(), this.getRoad().getId(), this.getPosition());
     }
 
     public float getLength() {
