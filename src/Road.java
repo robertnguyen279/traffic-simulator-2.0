@@ -6,22 +6,22 @@ public class Road {
     private int length;
     private int[] startLocation;
     private int[] endLocation;
-    private ArrayList<Car> cars = new ArrayList<>();
-    private ArrayList<TrafficLight> lights = new ArrayList<>();
+    private ArrayList<Car> carsOnRoad = new ArrayList<>();
+    private ArrayList<TrafficLight> lightsOnRoad = new ArrayList<>();
     private ArrayList<Road> connectedRoads = new ArrayList<>();
 
     public Road(String id, int speedLimit, int length, int[] startLocation) {
         this.id = "road_" + id;
-        this.speedLimit = 1;
+        this.speedLimit = speedLimit;
         this.length = length;
         this.startLocation = startLocation;
         endLocation = new int[]{this.length + this.startLocation[0], 0}; //only works for horizontal roads;
     }
 
-    public void createCars(int carSpawns) {
-        for (int i = 0; i < carSpawns; i++)
-            cars.add(new Car(Integer.toString(i), this));
-    }
+//    public void createCars(int carSpawns) {
+//        for (int i = 0; i < carSpawns; i++)
+//            carsOnRoad.add(new Car(Integer.toString(i), this));
+//    }
 
 
     public String getId() {
@@ -73,20 +73,20 @@ public class Road {
         return endLocation;
     }
 
-    public ArrayList<Car> getCars() {
-        return cars;
+    public ArrayList<Car> getCarsOnRoad() {
+        return carsOnRoad;
     }
 
-    public void setCars(ArrayList<Car> cars) {
-        this.cars = cars;
+    public void setCarsOnRoad(ArrayList<Car> carsOnRoad) {
+        this.carsOnRoad = carsOnRoad;
     }
 
-    public ArrayList<TrafficLight> getLights() {
-        return lights;
+    public ArrayList<TrafficLight> getLightsOnRoad() {
+        return lightsOnRoad;
     }
 
-    public void setLights(ArrayList<TrafficLight> lights) {
-        this.lights = lights;
+    public void setLightsOnRoad(ArrayList<TrafficLight> lightsOnRoad) {
+        this.lightsOnRoad = lightsOnRoad;
     }
 
     public ArrayList<Road> getConnectedRoads() {

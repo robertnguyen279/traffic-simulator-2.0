@@ -1,36 +1,52 @@
 public class Car {
+    private static final int STOPPED = 0; //car speed is 0m/s
+    private static final int NEXT_ROAD_INDEX = 0;
+    private static final int START_POSITION = 0;
     String id; // unique identifier
-    float length = 1f; // number of segments occupied, more for graphical representation, 1 for ease of prototype.
-    private int speed = 0; //segments moved per turn
-    private int position; // current segment
-    private Road road; // current road object
-    private float breadth = length * 0.5f;
+    static float length; // number of segments occupied, 1 for ease of prototype.
+    private static float breadth;
+    private int speed; //segments moved per turn
+    private int position; // position on current road
+    private Road currentRoad; // current Road object
 
-    public Car(String id, Road road) {
+
+    public Car(String id, Road currentRoad) {
         this.id = "car_" + id;
-        this.road = road;
+        this.currentRoad = currentRoad;
+        length = 1f;
+        breadth = length * 0.5f;
+        speed = 0;
+        position = 0;
+    }
+
+    public Car() {
+        id = "000";
+        length = 1f;
+        breadth = length * 0.5f;
+        speed = 0;
         position = 0;
     }
 
     public void move() {
-        this.setSpeed(this.road.getSpeedLimit()); //set speed limit to that of current road
-        if (!this.road.getLights().isEmpty() && this.position == this.road.getLights().get(0).getPosition() && this.road.getLights().get(0).getState().equals("red")) {
-            this.setSpeed(0);
+        this.setSpeed(this.currentRoad.getSpeedLimit()); //set speed limit to that of currentRoad
+        if (!this.currentRoad.getLightsOnRoad().isEmpty() && this.position == this.currentRoad.getLightsOnRoad().get(0).getPosition() && this.currentRoad.getLightsOnRoad().get(0).getState().equals("red")) {
+            this.setSpeed(STOPPED);
         } else {
-            this.setSpeed(this.road.getSpeedLimit());
-            if (this.road.getLength() == this.getPosition() && !this.road.getConnectedRoads().isEmpty()) {
-                this.setRoad(this.road.getConnectedRoads().get(0));
-                this.setPosition(0);
-            } else if (this.road.getLength() > this.getPosition()) {
+            this.setSpeed(this.currentRoad.getSpeedLimit());
+            if (this.currentRoad.getLength() == this.getPosition() && !this.currentRoad.getConnectedRoads().isEmpty()) {
+                this.setCurrentRoad(this.currentRoad.getConnectedRoads().get(NEXT_ROAD_INDEX));
+                this.setPosition(START_POSITION);
+            } else if (this.currentRoad.getLength() > this.getPosition()) {
                 this.setPosition(this.getPosition() + this.getSpeed());
             } else {
-                this.setSpeed(0);
+                this.setSpeed(STOPPED);
             }
         }
     }
 
-    public void printCar() {
-        System.out.printf("%s going:%dm/s on %s at position:%s%n", this.getId(), this.getSpeed(), this.getRoad().getId(), this.getPosition());
+    public void printCarStatus() {
+        System.out.printf("%s going:%dm/s on %s at position:%s%n", this.getId(), this.getSpeed(), this.getCurrentRoad().
+                getId(), this.getPosition());
     }
 
     public float getLength() {
@@ -38,7 +54,7 @@ public class Car {
     }
 
     public void setLength(float length) {
-        this.length = length;
+        Car.length = length;
     }
 
     public float getBreadth() {
@@ -46,7 +62,7 @@ public class Car {
     }
 
     public void setBreadth(float breadth) {
-        this.breadth = breadth;
+        Car.breadth = breadth;
     }
 
     public int getSpeed() {
@@ -65,12 +81,12 @@ public class Car {
         this.position = position;
     }
 
-    public Road getRoad() {
-        return road;
+    public Road getCurrentRoad() {
+        return currentRoad;
     }
 
-    public void setRoad(Road road) {
-        this.road = road;
+    public void setCurrentRoad(Road currentRoad) {
+        this.currentRoad = currentRoad;
     }
 
     public String getId() {

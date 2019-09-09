@@ -38,13 +38,13 @@ class RoadTest {
     @Test
     void getCars() {
         ArrayList<Car> expected = new ArrayList<>();
-        assertEquals(expected, road.getCars());
+        assertEquals(expected, road.getCarsOnRoad());
     }
 
     @Test
     void getLights() {
         ArrayList<TrafficLight> expected = new ArrayList<>();
-        assertEquals(expected, road.getLights());
+        assertEquals(expected, road.getLightsOnRoad());
     }
 
     @Test

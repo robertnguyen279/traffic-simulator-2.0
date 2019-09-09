@@ -13,7 +13,7 @@ class TrafficLightTest {
 
     @Test
     void getRoad() {
-        assertEquals(road, light.getRoad());
+        assertEquals(road, light.getRoadAttachedTo());
     }
 
     @Test

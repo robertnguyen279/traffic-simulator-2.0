@@ -29,7 +29,7 @@ class CarTest {
 
     @Test
     void getRoad() {
-        assertEquals(road, car.getRoad());
+        assertEquals(road, car.getCurrentRoad());
     }
 
     @Test

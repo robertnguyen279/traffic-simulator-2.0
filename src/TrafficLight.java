@@ -1,17 +1,17 @@
 public class TrafficLight {
-    private static final double CHANGE_GREEN = 0.5;
+    private static final double CHANGE_GREEN = 0.5; // 50/50 chance of changing state.
     private static final String GREEN = "green";
     private static final String RED = "red";
     private String id;
     private String state;
     private int position;
-    private Road road;
+    private Road roadAttachedTo;
 
     public TrafficLight(String id, Road road) {
         this.id = "light_" + id;
-        state = "green";
-        this.road = road;
-        position = this.road.getLength(); // always places the traffic light at the end of the road.
+        state = GREEN;
+        this.roadAttachedTo = road;
+        position = this.roadAttachedTo.getLength(); // always places the traffic light at the end of the roadAttachedTo.
     }
 
     public void operate() {
@@ -23,8 +23,8 @@ public class TrafficLight {
         }
     }
 
-    public void printLight() {
-        System.out.printf("%s is:%s on %s at position:%s%n", this.getId(), this.getState(), this.getRoad().getId(), this.getPosition());
+    public void printLightStatus() {
+        System.out.printf("%s is:%s on %s at position:%s%n", this.getId(), this.getState(), this.getRoadAttachedTo().getId(), this.getPosition());
     }
 
     public String getState() {
@@ -35,12 +35,12 @@ public class TrafficLight {
         this.state = state;
     }
 
-    public Road getRoad() {
-        return road;
+    public Road getRoadAttachedTo() {
+        return roadAttachedTo;
     }
 
-    public void setRoad(Road road) {
-        this.road = road;
+    public void setRoadAttachedTo(Road roadAttachedTo) {
+        this.roadAttachedTo = roadAttachedTo;
     }
 
     public int getPosition() {
