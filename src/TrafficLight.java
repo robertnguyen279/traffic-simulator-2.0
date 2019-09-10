@@ -14,6 +14,7 @@ public class TrafficLight {
         state = RED;
         this.roadAttachedTo = road;
         position = this.roadAttachedTo.getLength(); // always places the traffic light at the end of the roadAttachedTo.
+        this.roadAttachedTo.getLightsOnRoad().add(this); // adds this light to the road it belongs to.
     }
 
     public void operate(int seed) {

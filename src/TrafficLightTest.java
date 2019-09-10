@@ -8,13 +8,13 @@ class TrafficLightTest {
 
     @Test
     void testOperate() {
-        light.operate(2124);
+        light.operate(3515);
         assertEquals("green", light.getState());
     }
 
     @Test
     void getState() {
-        assertEquals("green", light.getState());
+        assertEquals("red", light.getState());
     }
 
     @Test
