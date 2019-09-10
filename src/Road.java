@@ -15,7 +15,7 @@ public class Road {
         this.speedLimit = speedLimit;
         this.length = length;
         this.startLocation = startLocation;
-        endLocation = new int[]{this.length + this.startLocation[0], 0}; //only works for horizontal roads;
+        this.endLocation = new int[]{this.length + this.startLocation[0], 0}; //only works for horizontal roads;
     }
 
 //    public void createCars(int carSpawns) {
@@ -54,6 +54,7 @@ public class Road {
 
     public void setStartLocation(int[] startLocation) {
         this.startLocation = startLocation;
+        this.endLocation = new int[]{this.length + this.startLocation[0], 0}; //only works for horizontal roads;
     }
 
     public String printEndLocation() {
