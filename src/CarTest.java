@@ -6,6 +6,11 @@ class CarTest {
     Road road = new Road("0", 1, 5, new int[]{0, 0});
     Car car = new Car("0", road);
 
+    @Test
+    void testMove() {
+        car.move();
+        assertEquals(1, car.getPosition());
+    }
 
     @Test
     void getLength() {

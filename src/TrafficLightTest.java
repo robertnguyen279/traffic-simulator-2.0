@@ -7,6 +7,12 @@ class TrafficLightTest {
     TrafficLight light = new TrafficLight("0", road);
 
     @Test
+    void testOperate() {
+        light.operate(2124);
+        assertEquals("green", light.getState());
+    }
+
+    @Test
     void getState() {
         assertEquals("green", light.getState());
     }

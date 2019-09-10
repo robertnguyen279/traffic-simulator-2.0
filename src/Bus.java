@@ -1,8 +1,8 @@
-//public class Bus extends Car {
-//
-//    public Bus(String id) {
-//        super("bus_" + id);
-//        length = new Car(id).getLength() * 3;
-//    }
-//
-//}
+public class Bus extends Car {
+
+    public Bus(String id) {
+        this.id = ("bus_" + id);
+        length = super.getLength() * 3;
+    }
+
+}

@@ -1,8 +1,8 @@
-//public class Motorbike extends Car {
-//
-//    public Motorbike(String id) {
-//        super("bike_"+ id);
-//        length = new Car(id).getLength() * 0.5f;
-//    }
-//
-//}
+public class Motorbike extends Car {
+
+    public Motorbike(String id) {
+        this.id = ("bike_" + id);
+        length = super.getLength() * 0.5f;
+    }
+
+}
