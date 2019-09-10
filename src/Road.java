@@ -57,8 +57,11 @@ public class Road {
     }
 
     public String printEndLocation() {
-        endLocation = new int[]{this.length + this.startLocation[0], 0}; //only works for horizontal roads;
         return endLocation[0] + "," + endLocation[1];
+    }
+
+    public void printRoadInfo() {
+        System.out.printf("%s limit of:%dm/s is %dm long at location:%s to %s%n", this.getId(), this.getSpeedLimit(), this.getLength(), this.printStartLocation(), this.printEndLocation());
     }
 
     public void setEndLocation(int[] endLocation) {

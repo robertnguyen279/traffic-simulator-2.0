@@ -1,3 +1,5 @@
+import java.util.Random;
+
 public class TrafficLight {
     private static final double CHANGE_GREEN = 0.5; // 50/50 chance of changing state.
     private static final String GREEN = "green";
@@ -9,13 +11,14 @@ public class TrafficLight {
 
     public TrafficLight(String id, Road road) {
         this.id = "light_" + id;
-        state = GREEN;
+        state = RED;
         this.roadAttachedTo = road;
         position = this.roadAttachedTo.getLength(); // always places the traffic light at the end of the roadAttachedTo.
     }
 
-    public void operate() {
-        double probability = Math.random();
+    public void operate(int seed) {
+        Random random = new Random(seed);
+        double probability = random.nextDouble();
         if (probability > CHANGE_GREEN) {
             this.setState(GREEN);
         } else {

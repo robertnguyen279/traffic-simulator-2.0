@@ -9,7 +9,7 @@ class CarTest {
     @Test
     void testMove() {
         car.move();
-        assertEquals(1, car.getPosition());
+        assertEquals(2, car.getPosition());
     }
 
     @Test
@@ -29,7 +29,7 @@ class CarTest {
 
     @Test
     void getPosition() {
-        assertEquals(0, car.getPosition());
+        assertEquals(1, car.getPosition());
     }
 
     @Test

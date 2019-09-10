@@ -1,7 +1,7 @@
 public class Car {
     private static final int STOPPED = 0; //car speed is 0m/s
     private static final int NEXT_ROAD_INDEX = 0;
-    private static final int START_POSITION = 0;
+    private static final int START_POSITION = 1;
     String id; // unique identifier
     static float length; // number of segments occupied, 1 for ease of prototype.
     private static float breadth;
@@ -16,7 +16,7 @@ public class Car {
         length = 1f;
         breadth = length * 0.5f;
         speed = 0;
-        position = 0;
+        position = 1;
     }
 
     public Car() {
@@ -24,7 +24,7 @@ public class Car {
         length = 1f;
         breadth = length * 0.5f;
         speed = 0;
-        position = 0;
+        position = 1;
     }
 
     public void move() {

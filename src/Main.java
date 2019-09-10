@@ -1,19 +1,22 @@
 import java.util.ArrayList;
+import java.util.Random;
+import java.util.Scanner;
 
 public class Main {
 
-    //    public static final int XAXIS = 0; //Array location for obj x axis location (x,y)
-//    public static final int YAXIS = 1; //Array location for obj y axis location (x,y)
+    public static final int REAL_TIME = 1000;
+    public static final int XAXIS = 0; //Array location for obj x axis location (x,y)
+    public static final int YAXIS = 1; //Array location for obj y axis location (x,y)
     private static int carSpawns;
     private static int roadSpawns;
     private static int lightSpawns;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         Main main = new Main();
 //      int turn = 0; //Simulation ticks (seconds)
 
         //Get info needed to start sim:
-//        Scanner simController = new Scanner(System.in);
+        Scanner simController = new Scanner(System.in);
 //        System.out.println("How many roads?");
 //        main.setRoadSpawns(simController.nextInt());
 //        System.out.println("How many cars?");
@@ -21,17 +24,30 @@ public class Main {
 //        System.out.println("How many traffic lights?");
 //        main.setLightSpawns(simController.nextInt());
 
-        // set values for user inputs for prototype testing:
+        // set values for user inputs for prototype.
         main.setCarSpawns(1);
         main.setLightSpawns(1);
         main.setRoadSpawns(2);
 
         //Create objects:
-        System.out.println("Object Creation:");
+        System.out.println("Object Creation:\n---------------------");
+        System.out.println("Roads:");
         ArrayList<Road> roads = new ArrayList<>();
         for (int i = 0; i < roadSpawns; i++) {
-            roads.add(new Road(Integer.toString(i), 1, 5, new int[]{0, 0}));
-            System.out.printf("%s limit of:%dm/s at location:%s to %s%n", roads.get(i).getId(), roads.get(i).getSpeedLimit(), roads.get(i).printStartLocation(), roads.get(i).printEndLocation());
+            System.out.println("Please input parameters for road_" + i + "...");
+            System.out.print("Length:");
+            int lengthInput = simController.nextInt();
+            System.out.print("Speed limit:");
+            int speedLimitInput = simController.nextInt();
+            speedLimitInput = 1; // force speed limit to be 1 for prototype.
+            System.out.print("Location:");
+            //int speedLimitInput = simController.nextInt();
+            roads.add(new Road(Integer.toString(i), speedLimitInput, lengthInput, new int[]{0, 0}));
+        }
+        System.out.println("\nRoads;");
+        for (Road road : roads
+        ) {
+            road.printRoadInfo();
         }
         ArrayList<Car> cars = new ArrayList<>();
         for (int i = 0; i < carSpawns; i++) {
@@ -50,9 +66,8 @@ public class Main {
 
         // set locations and connections:
         System.out.println("Settings:");
-        roads.get(1).setStartLocation(new int[]{4, 0}); // move road_1 to a position at the end of road_0.
-        roads.get(1).setLength(7); // make road_1 longer.
-        System.out.printf("%s limit of:%dm/s set to location:%s to %s%n", roads.get(1).getId(), roads.get(1).getSpeedLimit(), roads.get(1).printStartLocation(), roads.get(1).printEndLocation());
+        roads.get(1).setStartLocation(new int[]{roads.get(0).getLength() + 1, 0}); // place road_1 to a position at the end of road_0.
+        roads.get(1).printRoadInfo();
         roads.get(0).getConnectedRoads().add(roads.get(1)); // connect road_0 to road_1
         System.out.println();
 
@@ -60,17 +75,23 @@ public class Main {
 
         //Simulation loop:
         System.out.println("Simulation:");
+        Random random = new Random();
+        int time = 0;
+        System.out.print("Set time scale in milliseconds:");
+        int speedOfSim = simController.nextInt();
         for (Car car : cars
         ) {
             do {
                 for (TrafficLight light : lights
                 ) {
-                    light.operate();
+                    light.operate(random.nextInt());
                     light.printLightStatus();
                 }
                 car.move();
                 car.printCarStatus();
-                System.out.println();
+                time = time + 1;
+                System.out.println(time + " Seconds have passed.\n");
+                Thread.sleep(speedOfSim); // set speed of simulation.
             } while (!car.getCurrentRoad().getConnectedRoads().isEmpty() || (car.getSpeed() > 0));
         }
 
