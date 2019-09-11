@@ -40,7 +40,7 @@ public class Car {
                 this.currentRoad.getCarsOnRoad().add(this);
                 this.position = START_POSITION;
             } else if (this.currentRoad.getLength() > this.getPosition()) {
-                this.position = (this.getPosition() + this.getSpeed());
+                this.position = (this.position + this.speed);
             } else {
                 this.speed = STOPPED;
             }
