@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String[] args) throws InterruptedException {
+    public static void main(String[] args) {
 
         //Get info needed to start sim:
         Scanner simController = new Scanner(System.in);
@@ -85,7 +85,11 @@ public class Main {
             }
             time = time + 1;
             System.out.println(time + " Seconds have passed.\n");
-            Thread.sleep(speedOfSim); // set speed of simulation.
+            try {
+                Thread.sleep(speedOfSim); // set speed of simulation.
+            } catch (InterruptedException sim) {
+                Thread.currentThread().interrupt();
+            }
         }
 
 
