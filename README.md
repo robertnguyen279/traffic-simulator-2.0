@@ -1,2 +1,3 @@
-# Traffic-Simulator-1.0
-A console based simulation of traffic.
+# Traffic-Simulator-2.0
+###Matthew Rooke
+A GUI based simulation of traffic.
