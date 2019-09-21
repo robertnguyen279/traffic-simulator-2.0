@@ -66,6 +66,7 @@ public class Main {
 
         //Simulation loop:
         System.out.println("Simulation:");
+        new SimulationWindow();
         Random random = new Random();
         int time = 0;
         System.out.print("Set time scale in milliseconds:");
