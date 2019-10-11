@@ -8,13 +8,17 @@ public class SimulationPanel extends JPanel {
     private ArrayList<Road> roads;
     private ArrayList<Car> cars;
     private ArrayList<TrafficLight> lights;
+    private Timer timer;
+    private int carsFinished = 0;
 
-    public void simulate() {
-        Random random = new Random();
-        int time = 0;
-        int speedOfSim = Integer.parseInt(JOptionPane.showInputDialog("Speed of simulation"));
-        int carsFinished = 0;
-        while (carsFinished < cars.size()) {
+    public void simulate(int speed) {
+        if (timer != null) {
+            timer.stop();
+        }
+        timer = new Timer(1000 / 60, e -> {
+            if (carsFinished == cars.size()) return;
+            Random random = new Random();
+            int speedOfSim = speed;
             for (TrafficLight light : lights) {
                 for (Car car : cars
                 ) {
@@ -30,16 +34,12 @@ public class SimulationPanel extends JPanel {
                     carsFinished = carsFinished + 1;
                 }
             }
-            time = time + 1;
-            System.out.println(time + " Seconds have passed.\n");
-            try {
-                Thread.sleep(speedOfSim); // set speed of simulation.
-            } catch (InterruptedException sim) {
-                Thread.currentThread().interrupt();
-            }
             repaint();
-        }
+        });
+        timer.start();
+
     }
+
 
     public void setRoads(ArrayList<Road> roads) {
         this.roads = roads;
@@ -64,11 +64,23 @@ public class SimulationPanel extends JPanel {
 
         for (Car car : cars
         ) {
-            int x = car.getPosition() * SCALE;
-            int y = (car.getCurrentRoad().getWidth() / 4) * (SCALE / 3);
+            int[] startLocation = car.getCurrentRoad().getStartLocation();
+            int x = (car.getPosition() + startLocation[0]) * SCALE;
+            int y = (startLocation[1] * SCALE) + SCALE;
             int width = car.getLength() * SCALE;
             int height = car.getBreadth() * SCALE;
             g.setColor(Color.red);
+            g.fillRect(x, y, -width, height);
+        }
+
+        for (TrafficLight light : lights
+        ) {
+            int[] startLocation = light.getRoadAttachedTo().getStartLocation();
+            int x = (light.getPosition() + startLocation[0]) * SCALE;
+            int y = startLocation[1] * SCALE;
+            int width = SCALE;
+            int height = (light.getRoadAttachedTo().getWidth() / 2) * SCALE;
+            g.setColor(Color.ORANGE);
             g.fillRect(x, y, width, height);
         }
     }

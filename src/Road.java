@@ -16,7 +16,7 @@ public class Road {
         this.id = "road_" + id;
         this.speedLimit = speedLimit;
         this.length = length;
-        width = 6;
+        width = 8;
         this.startLocation = startLocation;
         this.endLocation = new int[]{this.length + this.startLocation[0], 0}; //only works for horizontal roads;
     }
@@ -28,15 +28,18 @@ public class Road {
 
     public void draw(Graphics g, int scale) {
         int[] startLocation = this.startLocation;
-        int x = startLocation[0];
-        int y = startLocation[1];
+        int x = startLocation[0] * scale;
+        int y = startLocation[1] * scale;
         int width = length * scale;
         int height = this.width * scale;
         g.setColor(Color.darkGray);
         g.fillRect(x, y, width, height);
+        //Center Lines
         g.setColor(Color.white);
-        g.drawLine(x, y + (height / 2) - 1, x + width, y + (height / 2) - 1);
-        g.drawLine(x, y + (height / 2) + 1, x + width, y + (height / 2) + 1);
+        g.fillRect(x, y + (height / 2) - scale / 6, width, scale / 6);
+        g.fillRect(x, y + (height / 2) + scale / 6, width, scale / 6);
+//        g.drawLine(x, y + (height / 2) - 1, x + width, y + (height / 2) - 1);
+//        g.drawLine(x, y + (height / 2) + 1, x + width, y + (height / 2) + 1);
     }
 
 

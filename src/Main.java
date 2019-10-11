@@ -8,7 +8,8 @@ public class Main {
         ArrayList<Road> roads = new ArrayList<>();
         int roadSpawns = 2;
         for (int i = 0; i < roadSpawns; i++) {
-            int lengthInput = Integer.parseInt(JOptionPane.showInputDialog("Please input length for road_" + i));
+//            int lengthInput = Integer.parseInt(JOptionPane.showInputDialog("Please input length for road_" + i));
+            int lengthInput = 50;
             int speedLimitInput = 1; // force speed limit to be 1 for prototype.
             roads.add(new Road(Integer.toString(i), speedLimitInput, lengthInput, new int[]{0, 0}));
         }
@@ -30,7 +31,7 @@ public class Main {
 
         // set locations and connections:
         System.out.println("Settings:");
-        roads.get(1).setStartLocation(new int[]{roads.get(0).getLength() + 1, 0}); // place road_1 to a position at the end of road_0.
+        roads.get(1).setStartLocation(new int[]{roads.get(0).getLength(), 0}); // place road_1 to a position at the end of road_0.
         roads.get(1).printRoadInfo();
         roads.get(0).getConnectedRoads().add(roads.get(1)); // connect road_0 to road_1
         System.out.println();
@@ -55,7 +56,7 @@ public class Main {
 
         mainWindow.setLocationRelativeTo(null);
         mainWindow.setVisible(true);
-        simulationPanel.simulate();
+        simulationPanel.simulate(Integer.parseInt(JOptionPane.showInputDialog("Speed of simulation")));
 
 
         //Simulation loop:

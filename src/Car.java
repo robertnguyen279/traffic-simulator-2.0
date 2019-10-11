@@ -13,7 +13,7 @@ public class Car {
     public Car(String id, Road currentRoad) {
         this.id = "car_" + id;
         this.currentRoad = currentRoad;
-        length = 4; // cars made 1m long for prototype.
+        length = 4;
         breadth = length / 2;
         speed = 0;
         position = 0;
@@ -22,15 +22,15 @@ public class Car {
 
     public Car() {
         id = "000";
-        length = 2;
+        length = 4;
         breadth = length / 2;
         speed = 0;
-        position = 1;
+        position = 0;
     }
 
     public void move() {
         this.speed = this.currentRoad.getSpeedLimit(); //set speed limit to that of currentRoad
-        if (!this.currentRoad.getLightsOnRoad().isEmpty() && this.position == this.currentRoad.getLightsOnRoad().get(0).getPosition() && this.currentRoad.getLightsOnRoad().get(0).getState().equals("red")) {
+        if (!this.currentRoad.getLightsOnRoad().isEmpty() && position == this.currentRoad.getLightsOnRoad().get(0).getPosition() && this.currentRoad.getLightsOnRoad().get(0).getState().equals("red")) {
             this.speed = STOPPED;
         } else {
             this.speed = this.currentRoad.getSpeedLimit();
@@ -39,7 +39,7 @@ public class Car {
                 this.currentRoad = this.currentRoad.getConnectedRoads().get(NEXT_ROAD_INDEX);
                 this.currentRoad.getCarsOnRoad().add(this);
                 this.position = START_POSITION;
-            } else if (this.currentRoad.getLength() > this.getPosition()) {
+            } else if (currentRoad.getLength() > position) {
                 this.position = (this.position + this.speed);
             } else {
                 this.speed = STOPPED;
