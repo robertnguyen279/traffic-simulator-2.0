@@ -1,46 +1,33 @@
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.Scanner;
 
 public class Main {
 
     public static void main(String[] args) {
+        //Simulation Window
+        JFrame simulationWindow = new JFrame("Traffic Simulator");
+        simulationWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        simulationWindow.setBounds(0, 0, 1600, 1024);
 
-        //Get info needed to start sim:
-        Scanner simController = new Scanner(System.in);
-//        System.out.println("How many roads?");
-//        main.setRoadSpawns(simController.nextInt());
-//        System.out.println("How many cars?");
-//        main.setCarSpawns(simController.nextInt());
-//        System.out.println("How many traffic lights?");
-//        main.setLightSpawns(simController.nextInt());
+
+        simulationWindow.setLocationRelativeTo(null);
+        simulationWindow.setVisible(true);
 
         // set values for user inputs for prototype.
         int roadSpawns = 2;
-        int carSpawns = 1;
         int lightSpawns = 1;
 
 
         //Create objects:
-        System.out.println("Object Creation:\n---------------------");
-        System.out.println("Roads:");
         ArrayList<Road> roads = new ArrayList<>();
         for (int i = 0; i < roadSpawns; i++) {
-            System.out.println("Please input parameters for road_" + i + "...");
-            System.out.print("Length:");
-            int lengthInput = simController.nextInt();
-//            System.out.print("Speed limit:");
-//            int speedLimitInput = simController.nextInt();
+            int lengthInput = Integer.parseInt(JOptionPane.showInputDialog("Please input length for road_" + i));
             int speedLimitInput = 1; // force speed limit to be 1 for prototype.
             roads.add(new Road(Integer.toString(i), speedLimitInput, lengthInput, new int[]{0, 0}));
         }
-        System.out.println("\nRoads;");
-        for (Road road : roads
-        ) {
-            road.printRoadInfo();
-        }
 
-        System.out.println("\nCars;");
+        int carSpawns = Integer.parseInt(JOptionPane.showInputDialog("Number of vehicles to spawn?"));
         ArrayList<Car> cars = new ArrayList<>();
         for (int i = 0; i < carSpawns; i++) {
             cars.add(new Car(Integer.toString(i), roads.get(0))); // all created cars will begin on road_0.
@@ -66,14 +53,17 @@ public class Main {
 
         //Simulation loop:
         System.out.println("Simulation:");
-        new SimulationWindow();
         Random random = new Random();
         int time = 0;
         System.out.print("Set time scale in milliseconds:");
-        int speedOfSim = simController.nextInt();
+        int speedOfSim = Integer.parseInt(JOptionPane.showInputDialog("Speed of simulation"));
         int carsFinished = 0;
         while (carsFinished < cars.size()) {
             for (TrafficLight light : lights) {
+                for (Car car : cars
+                ) {
+                    car.printCarStatus();
+                }
                 light.operate(random.nextInt());
                 light.printLightStatus();
             }
@@ -92,7 +82,5 @@ public class Main {
                 Thread.currentThread().interrupt();
             }
         }
-
-
     }
 }
