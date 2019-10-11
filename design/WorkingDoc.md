@@ -66,8 +66,11 @@ position, the end of the road, and will interact with cars that are also at that
 cars will stop and not move to the next road. If the light is green the cars will continue past and move to the next 
 road.
 
-###SimulationWindow
-This will generate the graphical display of the simulation.
+### SimulationWindow
+This class will generate the graphical display of the simulation.
+
+### SaveFile
+This class will handel the saving of simulation files.
 
 ### Main
 This class will have the main() method that will contain the simulation loop.
