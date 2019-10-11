@@ -15,10 +15,9 @@ public class SimulationPanel extends JPanel {
         if (timer != null) {
             timer.stop();
         }
-        timer = new Timer(1000 / 60, e -> {
+        timer = new Timer(speed / 60, e -> {
             if (carsFinished == cars.size()) return;
             Random random = new Random();
-            int speedOfSim = speed;
             for (TrafficLight light : lights) {
                 for (Car car : cars
                 ) {
@@ -64,24 +63,12 @@ public class SimulationPanel extends JPanel {
 
         for (Car car : cars
         ) {
-            int[] startLocation = car.getCurrentRoad().getStartLocation();
-            int x = (car.getPosition() + startLocation[0]) * SCALE;
-            int y = (startLocation[1] * SCALE) + SCALE;
-            int width = car.getLength() * SCALE;
-            int height = car.getBreadth() * SCALE;
-            g.setColor(Color.red);
-            g.fillRect(x, y, -width, height);
+            car.draw(g, SCALE);
         }
 
         for (TrafficLight light : lights
         ) {
-            int[] startLocation = light.getRoadAttachedTo().getStartLocation();
-            int x = (light.getPosition() + startLocation[0]) * SCALE;
-            int y = startLocation[1] * SCALE;
-            int width = SCALE;
-            int height = (light.getRoadAttachedTo().getWidth() / 2) * SCALE;
-            g.setColor(Color.ORANGE);
-            g.fillRect(x, y, width, height);
+            light.draw(g, SCALE);
         }
     }
 }

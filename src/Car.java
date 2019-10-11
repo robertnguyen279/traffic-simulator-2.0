@@ -1,3 +1,6 @@
+import java.awt.*;
+import java.util.Random;
+
 public class Car {
     private static final int STOPPED = 0; //car speed is 0m/s
     private static final int NEXT_ROAD_INDEX = 0;
@@ -8,6 +11,7 @@ public class Car {
     private int speed; //segments moved per turn
     private int position; // position on current road
     private Road currentRoad; // current Road object
+    private Color colour;
 
 
     public Car(String id, Road currentRoad) {
@@ -18,6 +22,7 @@ public class Car {
         speed = 0;
         position = 0;
         this.currentRoad.getCarsOnRoad().add(this); //add this car to the road its on.
+        colour = randomColour();
     }
 
     public Car() {
@@ -26,6 +31,7 @@ public class Car {
         breadth = length / 2;
         speed = 0;
         position = 0;
+        colour = randomColour();
     }
 
     public void move() {
@@ -100,5 +106,22 @@ public class Car {
         this.id = id;
     }
 
+    public void draw(Graphics g, int scale) {
+        int[] startLocation = getCurrentRoad().getStartLocation();
+        int x = (getPosition() + startLocation[0]) * scale;
+        int y = (startLocation[1] * scale) + scale;
+        int width = getLength() * scale;
+        int height = getBreadth() * scale;
+        g.setColor(colour);
+        g.fillRect(x, y, -width, height);
+    }
+
+    public Color randomColour() {
+        Random random = new Random();
+        int r = random.nextInt(255);
+        int g = random.nextInt(255);
+        int b = random.nextInt(255);
+        return new Color(r, g, g);
+    }
 }
 

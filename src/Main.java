@@ -56,7 +56,7 @@ public class Main {
 
         mainWindow.setLocationRelativeTo(null);
         mainWindow.setVisible(true);
-        simulationPanel.simulate(Integer.parseInt(JOptionPane.showInputDialog("Speed of simulation")));
+        simulationPanel.simulate(Integer.parseInt(JOptionPane.showInputDialog("Time Scale?")));
 
 
         //Simulation loop:
