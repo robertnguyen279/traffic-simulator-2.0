@@ -66,7 +66,7 @@ position, the end of the road, and will interact with cars that are also at that
 cars will stop and not move to the next road. If the light is green the cars will continue past and move to the next 
 road.
 
-### SimulationWindow
+### SimulationPanel
 This class will generate the graphical display of the simulation.
 
 ### SaveFile

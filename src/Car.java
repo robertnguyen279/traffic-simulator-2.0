@@ -1,10 +1,10 @@
 public class Car {
     private static final int STOPPED = 0; //car speed is 0m/s
     private static final int NEXT_ROAD_INDEX = 0;
-    private static final int START_POSITION = 1;
+    private static final int START_POSITION = 0;
     String id; // unique identifier
-    static float length; // number of segments occupied, 1 for ease of prototype.
-    private static float breadth;
+    static int length; // number of segments occupied, 1 for ease of prototype.
+    private static int breadth;
     private int speed; //segments moved per turn
     private int position; // position on current road
     private Road currentRoad; // current Road object
@@ -13,17 +13,17 @@ public class Car {
     public Car(String id, Road currentRoad) {
         this.id = "car_" + id;
         this.currentRoad = currentRoad;
-        length = 1f; // cars made 1m long for prototype.
-        breadth = length * 0.5f;
+        length = 4; // cars made 1m long for prototype.
+        breadth = length / 2;
         speed = 0;
-        position = 1;
+        position = 0;
         this.currentRoad.getCarsOnRoad().add(this); //add this car to the road its on.
     }
 
     public Car() {
         id = "000";
-        length = 1f;
-        breadth = length * 0.5f;
+        length = 2;
+        breadth = length / 2;
         speed = 0;
         position = 1;
     }
@@ -52,19 +52,19 @@ public class Car {
                 getId(), this.getPosition());
     }
 
-    public float getLength() {
+    public int getLength() {
         return length;
     }
 
-    public void setLength(float length) {
+    public void setLength(int length) {
         Car.length = length;
     }
 
-    public float getBreadth() {
+    public int getBreadth() {
         return breadth;
     }
 
-    public void setBreadth(float breadth) {
+    public void setBreadth(int breadth) {
         Car.breadth = breadth;
     }
 

@@ -1,9 +1,11 @@
+import java.awt.*;
 import java.util.ArrayList;
 
 public class Road {
     private String id;
     private int speedLimit;
     private int length;
+    private int width;
     private int[] startLocation;
     private int[] endLocation;
     private ArrayList<Car> carsOnRoad = new ArrayList<>();
@@ -14,6 +16,7 @@ public class Road {
         this.id = "road_" + id;
         this.speedLimit = speedLimit;
         this.length = length;
+        width = 6;
         this.startLocation = startLocation;
         this.endLocation = new int[]{this.length + this.startLocation[0], 0}; //only works for horizontal roads;
     }
@@ -22,6 +25,19 @@ public class Road {
 //        for (int i = 0; i < carSpawns; i++)
 //            carsOnRoad.add(new Car(Integer.toString(i), this));
 //    }
+
+    public void draw(Graphics g, int scale) {
+        int[] startLocation = this.startLocation;
+        int x = startLocation[0];
+        int y = startLocation[1];
+        int width = length * scale;
+        int height = this.width * scale;
+        g.setColor(Color.darkGray);
+        g.fillRect(x, y, width, height);
+        g.setColor(Color.white);
+        g.drawLine(x, y + (height / 2) - 1, x + width, y + (height / 2) - 1);
+        g.drawLine(x, y + (height / 2) + 1, x + width, y + (height / 2) + 1);
+    }
 
 
     public String getId() {
@@ -47,6 +63,15 @@ public class Road {
     public void setLength(int length) {
         this.length = length;
     }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
 
     public String printStartLocation() {
         return startLocation[0] + "," + startLocation[1];
