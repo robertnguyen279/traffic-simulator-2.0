@@ -6,7 +6,7 @@ import java.util.Random;
 public class SimulationPanel extends JPanel {
     private static final int SCALE = 10;
     private ArrayList<Road> roads;
-    private ArrayList<Car> cars;
+    private ArrayList<Vehicle> vehicles;
     private ArrayList<TrafficLight> lights;
     private Timer timer;
     private int carsFinished = 0;
@@ -16,20 +16,20 @@ public class SimulationPanel extends JPanel {
             timer.stop();
         }
         timer = new Timer(speed / 60, e -> {
-            if (carsFinished == cars.size()) return;
+            if (carsFinished == vehicles.size()) return;
             Random random = new Random();
             for (TrafficLight light : lights) {
-                for (Car car : cars
+                for (Vehicle vehicle : vehicles
                 ) {
-                    car.printCarStatus();
+                    vehicle.printStatus();
                 }
                 light.operate(random.nextInt());
                 light.printLightStatus();
             }
-            for (Car car : cars) {
-                car.move();
-                car.printCarStatus();
-                if (car.getCurrentRoad().getConnectedRoads().isEmpty() && (car.getSpeed() == 0)) {
+            for (Vehicle vehicle : vehicles) {
+                vehicle.move();
+                vehicle.printStatus();
+                if (vehicle.getCurrentRoad().getConnectedRoads().isEmpty() && (vehicle.getSpeed() == 0)) {
                     carsFinished = carsFinished + 1;
                 }
             }
@@ -44,8 +44,8 @@ public class SimulationPanel extends JPanel {
         this.roads = roads;
     }
 
-    public void setCars(ArrayList<Car> cars) {
-        this.cars = cars;
+    public void setVehicles(ArrayList<Vehicle> vehicles) {
+        this.vehicles = vehicles;
     }
 
     public void setLights(ArrayList<TrafficLight> lights) {
@@ -61,9 +61,9 @@ public class SimulationPanel extends JPanel {
             road.draw(g, SCALE);
         }
 
-        for (Car car : cars
+        for (Vehicle vehicle : vehicles
         ) {
-            car.draw(g, SCALE);
+            vehicle.draw(g, SCALE);
         }
 
         for (TrafficLight light : lights

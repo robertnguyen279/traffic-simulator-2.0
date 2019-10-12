@@ -14,12 +14,12 @@ public class Main {
             roads.add(new Road(Integer.toString(i), speedLimitInput, lengthInput, new int[]{0, 0}));
         }
 
-        ArrayList<Car> cars = new ArrayList<>();
-//        int carSpawns = Integer.parseInt(JOptionPane.showInputDialog("Number of vehicles to spawn?"));
-        int carSpawns = 1;
-        for (int i = 0; i < carSpawns; i++) {
-            cars.add(new Car(Integer.toString(i), roads.get(0))); // all created cars will begin on road_0.
-            cars.get(i).printCarStatus();
+        ArrayList<Vehicle> vehicles = new ArrayList<>();
+//        int vehicleSpawns = Integer.parseInt(JOptionPane.showInputDialog("Number of vehicles to spawn?"));
+        int vehicleSpawns = 1;
+        for (int i = 0; i < vehicleSpawns; i++) {
+            vehicles.add(new Car(Integer.toString(i), roads.get(0))); // all created vehicles will begin on road_0.
+            vehicles.get(i).printStatus();
         }
 
         ArrayList<TrafficLight> lights = new ArrayList<>();
@@ -50,7 +50,7 @@ public class Main {
 
         SimulationPanel simulationPanel = new SimulationPanel();
         simulationPanel.setRoads(roads);
-        simulationPanel.setCars(cars);
+        simulationPanel.setVehicles(vehicles);
         simulationPanel.setLights(lights);
         mainWindow.add(simulationPanel, BorderLayout.CENTER);
 

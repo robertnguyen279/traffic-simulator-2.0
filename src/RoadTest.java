@@ -38,7 +38,7 @@ class RoadTest {
     @Test
     void getCars() {
         ArrayList<Car> expected = new ArrayList<>();
-        assertEquals(expected, road.getCarsOnRoad());
+        assertEquals(expected, road.getVehiclesOnRoad());
     }
 
     @Test
