@@ -1,66 +1,88 @@
 import javax.swing.*;
+import javax.swing.event.MenuEvent;
+import javax.swing.event.MenuListener;
 import java.awt.*;
-import java.util.ArrayList;
 
 public class Main {
 
+    public static final int WINDOW_WIDTH = 1600;
+    public static final int WINDOW_HEIGHT = 1024;
+    private static SimulationPanel simulationPanel = new SimulationPanel();
+
     public static void main(String[] args) {
-        ArrayList<Road> roads = new ArrayList<>();
-        int roadSpawns = 2;
-        for (int i = 0; i < roadSpawns; i++) {
-//            int lengthInput = Integer.parseInt(JOptionPane.showInputDialog("Please input length for road_" + i));
-            int lengthInput = 50;
-            int speedLimitInput = 1; // force speed limit to be 1 for prototype.
-            roads.add(new Road(Integer.toString(i), speedLimitInput, lengthInput, new int[]{0, 0}));
-        }
-
-        ArrayList<Vehicle> vehicles = new ArrayList<>();
-//        int vehicleSpawns = Integer.parseInt(JOptionPane.showInputDialog("Number of vehicles to spawn?"));
-        int vehicleSpawns = 1;
-        for (int i = 0; i < vehicleSpawns; i++) {
-            vehicles.add(new Car(Integer.toString(i), roads.get(0))); // all created vehicles will begin on road_0.
-            vehicles.get(i).printStatus();
-        }
-
-        ArrayList<TrafficLight> lights = new ArrayList<>();
-        int lightSpawns = 1;
-        for (int i = 0; i < lightSpawns; i++) {
-            lights.add(new TrafficLight(Integer.toString(i), roads.get(0))); // all created lights will begin on road_0.
-            lights.get(i).printLightStatus();
-        }
-
-        // set locations and connections:
-        System.out.println("Settings:");
-        roads.get(1).setStartLocation(new int[]{roads.get(0).getLength(), 0}); // place road_1 to a position at the end of road_0.
-        roads.get(1).printRoadInfo();
-        roads.get(0).getConnectedRoads().add(roads.get(1)); // connect road_0 to road_1
-        System.out.println();
-
-        // Simulation Window
+        // Simulation Window setup:
         JFrame mainWindow = new JFrame("Traffic Simulator");
         mainWindow.setLayout(new BorderLayout());
         mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        mainWindow.setBounds(0, 0, 1600, 1024);
+        mainWindow.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 
+        //Status Bar
+        JPanel bottomPanel = new JPanel();
+        bottomPanel.setLayout(new GridLayout(1, 0));
+        bottomPanel.setBorder(BorderFactory.createLoweredSoftBevelBorder());
+        JLabel modeLabel = new JLabel("Mode: ");
+        bottomPanel.add(modeLabel);
+        JLabel statusLabel = new JLabel("Status: ");
+        bottomPanel.add(statusLabel);
+        mainWindow.add(bottomPanel, BorderLayout.SOUTH);
+
+        //Editor Panel
+        JPanel placeholder = new JPanel();
+        placeholder.setBackground(Color.GRAY);
+        mainWindow.add(placeholder);
+
+        //Menu bar:
         JMenuBar menuBar = new JMenuBar();
         mainWindow.add(menuBar, BorderLayout.NORTH);
 
-        JMenu optionsMenu = new JMenu("Options");
-        menuBar.add(optionsMenu);
+        JMenu editMenu = new JMenu("City Editor");
+        MenuListener cityLis = new MenuListener() {
+            @Override
+            public void menuSelected(MenuEvent e) {
+                modeLabel.setText("Mode: Editor");
+                mainWindow.add(placeholder);
+                mainWindow.repaint();
+            }
 
-        SimulationPanel simulationPanel = new SimulationPanel();
-        simulationPanel.setRoads(roads);
-        simulationPanel.setVehicles(vehicles);
-        simulationPanel.setLights(lights);
-        mainWindow.add(simulationPanel, BorderLayout.CENTER);
+            @Override
+            public void menuDeselected(MenuEvent e) {
+                mainWindow.remove(placeholder);
+                mainWindow.repaint();
+            }
+
+            @Override
+            public void menuCanceled(MenuEvent e) {
+            }
+        };
+        editMenu.addMenuListener(cityLis);
+        menuBar.add(editMenu);
+
+        JMenu simMenu = new JMenu("Simulation");
+        MenuListener simLis = new MenuListener() {
+            @Override
+            public void menuSelected(MenuEvent e) {
+                System.out.println("Simulator Selected");
+                modeLabel.setText("Mode: Simulation");
+                simulationPanel = new SimulationPanel();
+                mainWindow.add(simulationPanel);
+                simulationPanel.simulate(2000);//Integer.parseInt(JOptionPane.showInputDialog("Time Scale?")));
+            }
+
+            @Override
+            public void menuDeselected(MenuEvent e) {
+                System.out.println("Simulator Deselected");
+                mainWindow.remove(simulationPanel);
+            }
+
+            @Override
+            public void menuCanceled(MenuEvent e) {
+            }
+        };
+        simMenu.addMenuListener(simLis);
+        menuBar.add(simMenu);
 
         mainWindow.setLocationRelativeTo(null);
         mainWindow.setVisible(true);
-        simulationPanel.simulate(Integer.parseInt(JOptionPane.showInputDialog("Time Scale?")));
-
-
-        //Simulation loop:
-        System.out.println("Simulation:");
 
     }
 }
