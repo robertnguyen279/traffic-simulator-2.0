@@ -1,5 +1,6 @@
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Road {
     private String id;
@@ -11,6 +12,22 @@ public class Road {
     private ArrayList<Vehicle> vehiclesOnRoad = new ArrayList<>();
     private ArrayList<TrafficLight> lightsOnRoad = new ArrayList<>();
     private ArrayList<Road> connectedRoads = new ArrayList<>();
+    private Random random = new Random();
+
+    public void createNewVehicle(String id) {
+        int randomVehicle = random.nextInt(3);
+        switch (randomVehicle) {
+            case 0:
+                vehiclesOnRoad.add(new Car(id, this));
+                break;
+            case 1:
+                vehiclesOnRoad.add(new Bus(id, this));
+                break;
+            case 2:
+                vehiclesOnRoad.add(new Motorbike(id, this));
+                break;
+        }
+    }
 
     public Road(String id, int speedLimit, int length, int[] startLocation) {
         this.id = "road_" + id;
@@ -21,10 +38,9 @@ public class Road {
         this.endLocation = new int[]{this.length + this.startLocation[0], 0}; //only works for horizontal roads;
     }
 
-//    public void createCars(int carSpawns) {
-//        for (int i = 0; i < carSpawns; i++)
-//            carsOnRoad.add(new Car(Integer.toString(i), this));
-//    }
+    private enum Orientation {
+        HORIZONATAL, VERTICAL
+    }
 
     public void draw(Graphics g, int scale) {
         int[] startLocation = this.startLocation;
@@ -38,8 +54,6 @@ public class Road {
         g.setColor(Color.white);
         g.fillRect(x, y + (height / 2) - scale / 6, width, scale / 6);
         g.fillRect(x, y + (height / 2) + scale / 6, width, scale / 6);
-//        g.drawLine(x, y + (height / 2) - 1, x + width, y + (height / 2) - 1);
-//        g.drawLine(x, y + (height / 2) + 1, x + width, y + (height / 2) + 1);
     }
 
 

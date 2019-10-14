@@ -10,6 +10,7 @@ public class Main {
     private static SimulationPanel simulationPanel = new SimulationPanel();
 
     public static void main(String[] args) {
+        simulationPanel.simulate(2000);//Integer.parseInt(JOptionPane.showInputDialog("Time Scale?"))););
         // Simulation Window setup:
         JFrame mainWindow = new JFrame("Traffic Simulator");
         mainWindow.setLayout(new BorderLayout());
@@ -40,13 +41,10 @@ public class Main {
             @Override
             public void menuSelected(MenuEvent e) {
                 modeLabel.setText("Mode: Editor");
-                mainWindow.add(placeholder);
-                mainWindow.repaint();
             }
 
             @Override
             public void menuDeselected(MenuEvent e) {
-                mainWindow.remove(placeholder);
                 mainWindow.repaint();
             }
 
@@ -61,17 +59,11 @@ public class Main {
         MenuListener simLis = new MenuListener() {
             @Override
             public void menuSelected(MenuEvent e) {
-                System.out.println("Simulator Selected");
                 modeLabel.setText("Mode: Simulation");
-                simulationPanel = new SimulationPanel();
-                mainWindow.add(simulationPanel);
-                simulationPanel.simulate(2000);//Integer.parseInt(JOptionPane.showInputDialog("Time Scale?")));
             }
 
             @Override
             public void menuDeselected(MenuEvent e) {
-                System.out.println("Simulator Deselected");
-                mainWindow.remove(simulationPanel);
             }
 
             @Override
@@ -79,7 +71,42 @@ public class Main {
             }
         };
         simMenu.addMenuListener(simLis);
+
+        JMenuItem startSimItem = new JMenuItem("Start");
+        startSimItem.addActionListener(e -> {
+            mainWindow.remove(placeholder);
+            mainWindow.add(simulationPanel, BorderLayout.CENTER);
+            simulationPanel.setStop(false);
+            statusLabel.setText("Status: Simulation Running");
+            mainWindow.validate();
+            mainWindow.repaint();
+        });
+        simMenu.add(startSimItem);
+
+        JMenuItem stopSimItem = new JMenuItem("Stop");
+        stopSimItem.addActionListener(e -> {
+            simulationPanel.setStop(true);
+            statusLabel.setText("Status: Simulation Stopped");
+            mainWindow.validate();
+            mainWindow.repaint();
+        });
+        simMenu.add(stopSimItem);
+
+        JMenuItem resetSimItem = new JMenuItem("Reset");
+        resetSimItem.addActionListener(e -> {
+            mainWindow.remove(simulationPanel);
+            mainWindow.remove(placeholder);
+            simulationPanel = new SimulationPanel();
+            mainWindow.add(simulationPanel, BorderLayout.CENTER);
+            simulationPanel.simulate(2000);//Integer.parseInt(JOptionPane.showInputDialog("Time Scale?")));
+            statusLabel.setText("Status: Simulation Reset");
+            mainWindow.validate();
+            mainWindow.repaint();
+        });
+        simMenu.add(resetSimItem);
+
         menuBar.add(simMenu);
+
 
         mainWindow.setLocationRelativeTo(null);
         mainWindow.setVisible(true);

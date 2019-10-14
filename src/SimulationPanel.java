@@ -4,30 +4,30 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class SimulationPanel extends JPanel {
-    private static final int SCALE = 6;
+    private static final int SCALE = 10;
     private ArrayList<Road> roads;
     private ArrayList<Vehicle> vehicles;
     private ArrayList<TrafficLight> lights;
     private Timer timer;
     private int carsFinished = 0;
+    private Boolean stop = true;
 
     public void simulate(int speed) {
         ArrayList<Road> roads = new ArrayList<>();
         int roadSpawns = 2;
         for (int i = 0; i < roadSpawns; i++) {
 //            int lengthInput = Integer.parseInt(JOptionPane.showInputDialog("Please input length for road_" + i));
-            int lengthInput = 50;
+            int lengthInput = 60;
             int speedLimitInput = 1; // force speed limit to be 1 for prototype.
             roads.add(new Road(Integer.toString(i), speedLimitInput, lengthInput, new int[]{0, 0}));
         }
 
-        ArrayList<Vehicle> vehicles = new ArrayList<>();
 //        int vehicleSpawns = Integer.parseInt(JOptionPane.showInputDialog("Number of vehicles to spawn?"));
         int vehicleSpawns = 1;
         for (int i = 0; i < vehicleSpawns; i++) {
-            vehicles.add(new Car(Integer.toString(i), roads.get(0))); // all created vehicles will begin on road_0.
-            vehicles.get(i).printStatus();
+            roads.get(0).createNewVehicle(Integer.toString(i));
         }
+        ArrayList<Vehicle> vehicles = roads.get(0).getVehiclesOnRoad();
 
         ArrayList<TrafficLight> lights = new ArrayList<>();
         int lightSpawns = 1;
@@ -40,6 +40,7 @@ public class SimulationPanel extends JPanel {
         System.out.println("Settings:");
         roads.get(1).setStartLocation(new int[]{roads.get(0).getLength(), 0}); // place road_1 to a position at the end of road_0.
         roads.get(1).printRoadInfo();
+        roads.get(1).setSpeedLimit(2);
         roads.get(0).getConnectedRoads().add(roads.get(1)); // connect road_0 to road_1
         System.out.println();
 
@@ -51,7 +52,7 @@ public class SimulationPanel extends JPanel {
             timer.stop();
         }
         timer = new Timer(speed / 60, e -> {
-            if (carsFinished == vehicles.size()) return;
+            if (carsFinished == vehicles.size() || stop) return;
             Random random = new Random();
             for (TrafficLight light : lights) {
                 for (Vehicle vehicle : vehicles
@@ -106,4 +107,13 @@ public class SimulationPanel extends JPanel {
             light.draw(g, SCALE);
         }
     }
+
+    public Boolean getStop() {
+        return stop;
+    }
+
+    public void setStop(Boolean stop) {
+        this.stop = stop;
+    }
+
 }

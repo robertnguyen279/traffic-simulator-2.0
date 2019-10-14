@@ -12,11 +12,12 @@ public abstract class Vehicle {
     Road currentRoad; // current Road object
     private int position; // position on current road
     private Color colour;
+    private Random random = new Random();
 
     public Vehicle(Road currentRoad) {
         id = "000";
         length = 4;
-        breadth = 0;
+        breadth = 2;
         speed = 0;
         position = 0;
         this.currentRoad = currentRoad;
@@ -33,23 +34,24 @@ public abstract class Vehicle {
     }
 
     public void move() {
-        this.speed = this.currentRoad.getSpeedLimit(); //set speed limit to that of currentRoad
-        if (!this.currentRoad.getLightsOnRoad().isEmpty() && position == this.currentRoad.getLightsOnRoad().get(0).getPosition() && this.currentRoad.getLightsOnRoad().get(0).getState().equals("red")) {
-            this.speed = STOPPED;
+        speed = currentRoad.getSpeedLimit(); //set speed limit to that of currentRoad
+        if (!currentRoad.getLightsOnRoad().isEmpty() && position == currentRoad.getLightsOnRoad().get(0).getPosition() && this.currentRoad.getLightsOnRoad().get(0).getState().equals("red")) {
+            speed = STOPPED;
         } else {
-            this.speed = this.currentRoad.getSpeedLimit();
-            if (this.currentRoad.getLength() == this.getPosition() && !this.currentRoad.getConnectedRoads().isEmpty()) {
-                this.currentRoad.getVehiclesOnRoad().remove(this);
-                this.currentRoad = this.currentRoad.getConnectedRoads().get(NEXT_ROAD_INDEX);
-                this.currentRoad.getVehiclesOnRoad().add(this);
-                this.position = START_POSITION;
+            speed = currentRoad.getSpeedLimit();
+            if (currentRoad.getLength() == getPosition() && !currentRoad.getConnectedRoads().isEmpty()) {
+                currentRoad.getVehiclesOnRoad().remove(this);
+                currentRoad = currentRoad.getConnectedRoads().get(NEXT_ROAD_INDEX);
+                currentRoad.getVehiclesOnRoad().add(this);
+                position = START_POSITION;
             } else if (currentRoad.getLength() > position) {
-                this.position = (this.position + this.speed);
+                position = (position + speed);
             } else {
-                this.speed = STOPPED;
+                speed = STOPPED;
             }
         }
     }
+
 
     public void printStatus() {
         System.out.printf("%s going:%dm/s on %s at position:%s%n", this.getId(), this.getSpeed(), this.getCurrentRoad().
@@ -115,11 +117,10 @@ public abstract class Vehicle {
     }
 
     public Color randomColour() {
-        Random random = new Random();
         int r = random.nextInt(255);
         int g = random.nextInt(255);
         int b = random.nextInt(255);
-        return new Color(r, g, g);
+        return new Color(r, g, b);
     }
 }
 
