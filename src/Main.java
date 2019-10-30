@@ -106,10 +106,13 @@ public class Main {
         JMenuItem loadSimItem = new JMenuItem("Load Map");
         simMenu.add(loadSimItem);
 
+        JMenuItem spawnItem = new JMenuItem("Add Vehicles");
+        simMenu.add(spawnItem);
+
         JMenuItem startSimItem = new JMenuItem("Start");
         startSimItem.setEnabled(false);
         startSimItem.addActionListener(e -> {
-            simulationPanel.simulate(updateRate);//Integer.parseInt(JOptionPane.showInputDialog("Time Scale?"))););
+            simulationPanel.simulate(updateRate);
             statusLabel.setText("Status: Simulation Started");
             simulationPanel.setStopSim(false);
             mainWindow.validate();
@@ -126,6 +129,15 @@ public class Main {
             startSimItem.setEnabled(true);
             menuBar.revalidate();
             mainWindow.repaint();
+        });
+
+        spawnItem.addActionListener(e -> {
+            String spawnInput = JOptionPane.showInputDialog("Total number of Vehicles to spawn:");
+            int spawns = Integer.parseInt(spawnInput);
+            simulationPanel.setVehicleSpawn(spawns);
+            String spawnRateInput = JOptionPane.showInputDialog("Number of Simulation tics between spawns:");
+            int spawnRate = Integer.parseInt(spawnRateInput);
+            simulationPanel.setVehicleSpawnRate(spawnRate);
         });
 
         JMenuItem stopSimItem = new JMenuItem("Stop");

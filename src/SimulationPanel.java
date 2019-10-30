@@ -19,11 +19,43 @@ public class SimulationPanel extends JPanel {
     private int carsFinished = 0;
     private Boolean stop = true;
     private Random random = new Random();
+    private int spawns = 2;
+    private int numberOfCycles = 20;
 
 
     public void loadMap(ArrayList<Road> roads, ArrayList<TrafficLight> lights) {
         this.roads = roads;
         this.lights = lights;
+    }
+
+    public void setVehicleSpawn(int spawns) {
+        this.spawns = spawns - 1;
+        createVehicle();
+    }
+
+    public void setVehicleSpawnRate(int rate) {
+        this.numberOfCycles = rate;
+    }
+
+    public void createVehicle() {
+        int randomVehicle = random.nextInt(3);
+        switch (randomVehicle) {
+            case 0:
+                Car newCar = new Car(Integer.toString(1), roads.get(0));
+                vehicles.add(newCar);
+                newCar.setPosition(-newCar.getLength());
+                break;
+            case 1:
+                Bus newBus = new Bus(Integer.toString(1), roads.get(0));
+                vehicles.add(newBus);
+                newBus.setPosition(-newBus.getLength());
+                break;
+            case 2:
+                Motorbike newBike = new Motorbike(Integer.toString(1), roads.get(0));
+                vehicles.add(newBike);
+                newBike.setPosition(-newBike.getLength());
+                break;
+        }
     }
 
     public void setScale(int scale) {
@@ -63,7 +95,6 @@ public class SimulationPanel extends JPanel {
 //            }
 //        }
 
-
         if (timer != null) {
             timer.stop();
         }
@@ -98,10 +129,8 @@ public class SimulationPanel extends JPanel {
                 }
             }
             System.out.println(cycle);
-            if (cycle % 20 == 0 && vehicles.size() < 2) {
-                Car newCar = new Car(Integer.toString(cycle), roads.get(0));
-                vehicles.add(newCar);
-                newCar.setPosition(-newCar.getLength()); //spawn off screen
+            if (cycle % numberOfCycles == 0 && vehicles.size() < spawns) {
+                createVehicle();
                 System.out.println(vehicles.size());
             }
 
