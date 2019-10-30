@@ -121,9 +121,9 @@ public abstract class Vehicle {
     }
 
     public Color randomColour() {
-        int r = random.nextInt(255);
-        int g = random.nextInt(255);
-        int b = random.nextInt(255);
+        int r = random.nextInt(245 + 1) + 10;
+        int g = random.nextInt(245 + 1) + 10;
+        int b = random.nextInt(245 + 1) + 10;
         return new Color(r, g, b);
     }
 }
