@@ -7,15 +7,17 @@ public class Main {
 
     public static final int WINDOW_WIDTH = 1600;
     public static final int WINDOW_HEIGHT = 1024;
+    public static final int UPDATE_RATE = 2000;
     private static SimulationPanel simulationPanel = new SimulationPanel();
 
     public static void main(String[] args) {
-        simulationPanel.simulate(2000);//Integer.parseInt(JOptionPane.showInputDialog("Time Scale?"))););
+        simulationPanel.simulate(UPDATE_RATE);//Integer.parseInt(JOptionPane.showInputDialog("Time Scale?"))););
         // Simulation Window setup:
         JFrame mainWindow = new JFrame("Traffic Simulator");
         mainWindow.setLayout(new BorderLayout());
         mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        mainWindow.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+        mainWindow.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        //mainWindow.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 
         //Status Bar
         JPanel bottomPanel = new JPanel();
@@ -60,6 +62,8 @@ public class Main {
             @Override
             public void menuSelected(MenuEvent e) {
                 modeLabel.setText("Mode: Simulation");
+                mainWindow.remove(placeholder);
+                mainWindow.add(simulationPanel, BorderLayout.CENTER);
             }
 
             @Override
@@ -74,10 +78,8 @@ public class Main {
 
         JMenuItem startSimItem = new JMenuItem("Start");
         startSimItem.addActionListener(e -> {
-            mainWindow.remove(placeholder);
-            mainWindow.add(simulationPanel, BorderLayout.CENTER);
+            statusLabel.setText("Status: Simulation Started");
             simulationPanel.setStopSim(false);
-            statusLabel.setText("Status: Simulation Running");
             mainWindow.validate();
             mainWindow.repaint();
         });
@@ -98,11 +100,12 @@ public class Main {
             mainWindow.remove(placeholder);
             simulationPanel = new SimulationPanel();
             mainWindow.add(simulationPanel, BorderLayout.CENTER);
-            simulationPanel.simulate(2000);//Integer.parseInt(JOptionPane.showInputDialog("Time Scale?")));
             statusLabel.setText("Status: Simulation Reset");
+            simulationPanel.simulate(UPDATE_RATE);//Integer.parseInt(JOptionPane.showInputDialog("Time Scale?")));
             mainWindow.validate();
             mainWindow.repaint();
         });
+
         simMenu.add(resetSimItem);
 
         menuBar.add(simMenu);
