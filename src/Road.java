@@ -1,6 +1,5 @@
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Random;
 
 public class Road {
     private String id;
@@ -12,22 +11,7 @@ public class Road {
     private ArrayList<Vehicle> vehiclesOnRoad = new ArrayList<>();
     private ArrayList<TrafficLight> lightsOnRoad = new ArrayList<>();
     private ArrayList<Road> connectedRoads = new ArrayList<>();
-    private Random random = new Random();
 
-    public void createNewVehicle(String id) {
-        int randomVehicle = random.nextInt(3);
-        switch (randomVehicle) {
-            case 0:
-                vehiclesOnRoad.add(new Car(id, this));
-                break;
-            case 1:
-                vehiclesOnRoad.add(new Bus(id, this));
-                break;
-            case 2:
-                vehiclesOnRoad.add(new Motorbike(id, this));
-                break;
-        }
-    }
 
     public Road(String id, int speedLimit, int length, int[] startLocation) {
         this.id = "road_" + id;

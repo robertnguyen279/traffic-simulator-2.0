@@ -36,9 +36,21 @@ public class SimulationPanel extends JPanel {
         }
 
 //        int vehicleSpawns = Integer.parseInt(JOptionPane.showInputDialog("Number of vehicles to spawn?"));
+        ArrayList<Vehicle> vehicles = new ArrayList<>();
         int vehicleSpawns = 1;
         for (int i = 0; i < vehicleSpawns; i++) {
-            roads.get(0).createNewVehicle(Integer.toString(i));
+            int randomVehicle = random.nextInt(3);
+            switch (randomVehicle) {
+                case 0:
+                    vehicles.add(new Car(Integer.toString(i), roads.get(0)));
+                    break;
+                case 1:
+                    vehicles.add(new Bus(Integer.toString(i), roads.get(0)));
+                    break;
+                case 2:
+                    vehicles.add(new Motorbike(Integer.toString(i), roads.get(0)));
+                    break;
+            }
         }
 
 
