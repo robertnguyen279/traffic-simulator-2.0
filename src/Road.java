@@ -2,6 +2,12 @@ import java.awt.*;
 import java.util.ArrayList;
 
 public class Road {
+
+    private enum Orientation {
+        HORIZONATAL, VERTICAL
+    }
+
+    private Orientation orientation;
     private String id;
     private int speedLimit;
     private int length;
@@ -20,10 +26,6 @@ public class Road {
         width = 8;
         this.startLocation = startLocation;
         this.endLocation = new int[]{this.length + this.startLocation[0], 0}; //only works for horizontal roads;
-    }
-
-    private enum Orientation {
-        HORIZONATAL, VERTICAL
     }
 
     public void draw(Graphics g, int scale) {
@@ -125,5 +127,13 @@ public class Road {
 
     public void setConnectedRoads(ArrayList<Road> connectedRoads) {
         this.connectedRoads = connectedRoads;
+    }
+
+    public Orientation getOrientation() {
+        return orientation;
+    }
+
+    public void setOrientation(Orientation orientation) {
+        this.orientation = orientation;
     }
 }

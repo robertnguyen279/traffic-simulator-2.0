@@ -7,7 +7,7 @@ public class Main {
 
     public static final int WINDOW_WIDTH = 1600;
     public static final int WINDOW_HEIGHT = 1024;
-    public static int updateRate = 2000;
+    private static int updateRate = 2000;
     private static SimulationPanel simulationPanel;
     private static final int SCALE = 10;
 

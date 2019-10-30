@@ -10,8 +10,8 @@ import static java.nio.file.StandardOpenOption.CREATE;
 public class SaveFile {
     public static void main(String[] args) {
         Path file =
-                Paths.get("C:\\Users\\matth\\OneDrive - James Cook University\\Semester 4\\CP2406 - Programming 3\\Assignments\\Traffic-Simulator-2.0\\src\\SaveFile.txt");
-        String s = "ABCDFG";
+                Paths.get("src/SaveFile.txt");
+        String s = "ABCDFGH";
         byte[] data = s.getBytes();
         OutputStream output = null;
         try {
