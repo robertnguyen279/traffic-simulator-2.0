@@ -4,7 +4,33 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class SimulationPanel extends JPanel {
-    public void simulate(int speed) {
+
+    public enum State {
+        STOPPED, RUNNING, FINISHED
+    }
+
+    static int cycle = 0;
+    private State state = State.STOPPED;
+    private int scale;
+    private ArrayList<Road> roads;
+    private ArrayList<Vehicle> vehicles = new ArrayList<>();
+    private ArrayList<TrafficLight> lights;
+    private Timer timer;
+    private int carsFinished = 0;
+    private Boolean stop = true;
+    private Random random = new Random();
+
+
+    public void loadMap(ArrayList<Road> roads, ArrayList<TrafficLight> lights) {
+        this.roads = roads;
+        this.lights = lights;
+    }
+
+    public void setScale(int scale) {
+        this.scale = scale;
+    }
+
+    public void simulate(int updateRate) {
         setLayout(new BorderLayout());
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new GridLayout(1, 0));
@@ -17,55 +43,32 @@ public class SimulationPanel extends JPanel {
         infoPanel.add(stateLabel);
         add(infoPanel, BorderLayout.SOUTH);
 
-        ArrayList<Road> roads = new ArrayList<>();
-        int roadSpawns = 2;
-        for (int i = 0; i < roadSpawns; i++) {
-//            int lengthInput = Integer.parseInt(JOptionPane.showInputDialog("Please input length for road_" + i));
-            int lengthInput = 60;
-            int speedLimitInput = 1; // force speed limit to be 1 for prototype.
-            roads.add(new Road(Integer.toString(i), speedLimitInput, lengthInput, new int[]{0, 0}));
-        }
-
 //        int vehicleSpawns = Integer.parseInt(JOptionPane.showInputDialog("Number of vehicles to spawn?"));
-        ArrayList<Vehicle> vehicles = new ArrayList<>();
-        int vehicleSpawns = 1;
-        for (int i = 0; i < vehicleSpawns; i++) {
-            int randomVehicle = random.nextInt(3);
-            switch (randomVehicle) {
-                case 0:
-                    vehicles.add(new Car(Integer.toString(i), roads.get(0)));
-                    break;
-                case 1:
-                    vehicles.add(new Bus(Integer.toString(i), roads.get(0)));
-                    break;
-                case 2:
-                    vehicles.add(new Motorbike(Integer.toString(i), roads.get(0)));
-                    break;
-            }
-        }
+//            int randomVehicle = random.nextInt(3);
+//            Car newCar = new Car(Integer.toString(i), roads.get(0));
+//            vehicles.add(newCar);
+//            newCar.setPosition(-newCar.getLength()); //spawn off screen
+//            switch (randomVehicle) {
+//                case 0:
+//                    Car newCar = new Car(Integer.toString(i), roads.get(0));
+//                    vehicles.add(newCar);
+//                    newCar.setPosition(-newCar.getLength());
+//                    break;
+//                case 1:
+//                    vehicles.add(new Bus(Integer.toString(i), roads.get(0)));
+//                    break;
+//                case 2:
+//                    vehicles.add(new Motorbike(Integer.toString(i), roads.get(0)));
+//                    break;
+//            }
+//        }
 
-        ArrayList<TrafficLight> lights = new ArrayList<>();
-        int lightSpawns = 1;
-        for (int i = 0; i < lightSpawns; i++) {
-            lights.add(new TrafficLight(Integer.toString(i), roads.get(0))); // all created lights will begin on road_0.
-            lights.get(i).printLightStatus();
-        }
-
-        // set locations and connections:
-        System.out.println("Settings:");
-        roads.get(1).setStartLocation(new int[]{roads.get(0).getLength(), 0}); // place road_1 to a position at the end of road_0.
-        roads.get(1).printRoadInfo();
-        roads.get(0).getConnectedRoads().add(roads.get(1)); // connect road_0 to road_1
-        System.out.println();
-
-        setRoads(roads);
-        setVehicles(vehicles);
-        setLights(lights);
 
         if (timer != null) {
             timer.stop();
         }
-        timer = new Timer(speed / 60, e -> {
+        timer = new Timer(updateRate / 60, e -> {
+            cycle++;
             if (carsFinished == vehicles.size()) {
                 state = State.FINISHED;
             } else if (stop) {
@@ -91,24 +94,22 @@ public class SimulationPanel extends JPanel {
                 vehicle.printStatus();
 
                 if (vehicle.getCurrentRoad().getConnectedRoads().isEmpty() && (vehicle.getSpeed() == 0)) {
-                    carsFinished = carsFinished + 1;
+                    vehicle.setPosition(1000);
                 }
             }
+            System.out.println(cycle);
+            if (cycle % 20 == 0 && vehicles.size() < 2) {
+                Car newCar = new Car(Integer.toString(cycle), roads.get(0));
+                vehicles.add(newCar);
+                newCar.setPosition(-newCar.getLength()); //spawn off screen
+                System.out.println(vehicles.size());
+            }
+
             repaint();
         });
         timer.start();
 
     }
-
-    private State state = State.STOPPED;
-    private static final int SCALE = 10;
-    private ArrayList<Road> roads;
-    private ArrayList<Vehicle> vehicles;
-    private ArrayList<TrafficLight> lights;
-    private Timer timer;
-    private int carsFinished = 0;
-    private Boolean stop = true;
-    private Random random = new Random();
 
     public Boolean getStopSim() {
         return stop;
@@ -133,17 +134,19 @@ public class SimulationPanel extends JPanel {
 
         for (Road road : roads
         ) {
-            road.draw(g, SCALE);
+            road.draw(g, scale);
         }
 
-        for (Vehicle vehicle : vehicles
-        ) {
-            vehicle.draw(g, SCALE);
+        if (!vehicles.isEmpty()) {
+            for (Vehicle vehicle : vehicles
+            ) {
+                vehicle.draw(g, scale);
+            }
         }
 
         for (TrafficLight light : lights
         ) {
-            light.draw(g, SCALE);
+            light.draw(g, scale);
         }
     }
 
@@ -152,16 +155,16 @@ public class SimulationPanel extends JPanel {
         for (Vehicle vehicle : vehicles) {
             totalSpeed = totalSpeed + vehicle.getSpeed();
         }
-        int average = totalSpeed / vehicles.size();
-        return average * 3.6 + "km/h";
+        if (!vehicles.isEmpty()) {
+            int average = totalSpeed / vehicles.size();
+            return average * 3.6 + "km/h";
+        } else {
+            return "0";
+        }
     }
 
     public void setStopSim(Boolean stop) {
         this.stop = stop;
-    }
-
-    public enum State {
-        STOPPED, RUNNING, FINISHED
     }
 
 

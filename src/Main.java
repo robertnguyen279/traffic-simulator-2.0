@@ -8,10 +8,10 @@ public class Main {
     public static final int WINDOW_WIDTH = 1600;
     public static final int WINDOW_HEIGHT = 1024;
     public static int updateRate = 2000;
-    private static SimulationPanel simulationPanel = new SimulationPanel();
+    private static SimulationPanel simulationPanel;
+    private static final int SCALE = 10;
 
     public static void main(String[] args) {
-        simulationPanel.simulate(updateRate);//Integer.parseInt(JOptionPane.showInputDialog("Time Scale?"))););
         // Simulation Window setup:
         JFrame mainWindow = new JFrame("Traffic Simulator");
         mainWindow.setLayout(new BorderLayout());
@@ -30,24 +30,27 @@ public class Main {
         mainWindow.add(bottomPanel, BorderLayout.SOUTH);
 
         //Editor Panel
-        JPanel placeholder = new JPanel();
-        placeholder.setBackground(Color.GRAY);
-        mainWindow.add(placeholder);
+        EditorPanel editorPanel = new EditorPanel();
+        statusLabel.setText("Status: New Map");
+        editorPanel.newMap();
+        editorPanel.setScale(SCALE);
+        mainWindow.add(editorPanel);
 
         //Menu bar:
         JMenuBar menuBar = new JMenuBar();
         mainWindow.add(menuBar, BorderLayout.NORTH);
 
+        //Editor Menu:
         JMenu editMenu = new JMenu("City Editor");
         MenuListener cityLis = new MenuListener() {
             @Override
             public void menuSelected(MenuEvent e) {
                 modeLabel.setText("Mode: Editor");
+                mainWindow.repaint();
             }
 
             @Override
             public void menuDeselected(MenuEvent e) {
-                mainWindow.repaint();
             }
 
             @Override
@@ -57,13 +60,36 @@ public class Main {
         editMenu.addMenuListener(cityLis);
         menuBar.add(editMenu);
 
+        JMenuItem newMapItem = new JMenuItem("New");
+        newMapItem.addActionListener(e -> {
+            editorPanel.setVisible(true);
+            statusLabel.setText("Status: New Map");
+            editorPanel.newMap();
+            mainWindow.validate();
+            mainWindow.repaint();
+        });
+        editMenu.add(newMapItem);
+
+        JMenuItem openMapItem = new JMenuItem("Open");
+        openMapItem.addActionListener(e -> {
+        });
+        editMenu.add(openMapItem);
+
+        JMenuItem saveMapItem = new JMenuItem("Save");
+        saveMapItem.addActionListener(e -> {
+        });
+        editMenu.add(saveMapItem);
+
+        JMenuItem exitProgramItem = new JMenuItem("Exit");
+        exitProgramItem.addActionListener(e -> System.exit(0));
+        editMenu.add(exitProgramItem);
+
         JMenu simMenu = new JMenu("Simulation");
         MenuListener simLis = new MenuListener() {
             @Override
             public void menuSelected(MenuEvent e) {
                 modeLabel.setText("Mode: Simulation");
-                mainWindow.remove(placeholder);
-                mainWindow.add(simulationPanel, BorderLayout.CENTER);
+                mainWindow.repaint();
             }
 
             @Override
@@ -76,14 +102,31 @@ public class Main {
         };
         simMenu.addMenuListener(simLis);
 
+
+        JMenuItem loadSimItem = new JMenuItem("Load Map");
+        simMenu.add(loadSimItem);
+
         JMenuItem startSimItem = new JMenuItem("Start");
+        startSimItem.setEnabled(false);
         startSimItem.addActionListener(e -> {
+            simulationPanel.simulate(updateRate);//Integer.parseInt(JOptionPane.showInputDialog("Time Scale?"))););
             statusLabel.setText("Status: Simulation Started");
             simulationPanel.setStopSim(false);
             mainWindow.validate();
             mainWindow.repaint();
         });
         simMenu.add(startSimItem);
+
+        loadSimItem.addActionListener(e -> {
+            editorPanel.setVisible(false);
+            simulationPanel = new SimulationPanel();
+            simulationPanel.setScale(SCALE);
+            simulationPanel.loadMap(editorPanel.getRoads(), editorPanel.getLights());
+            mainWindow.add(simulationPanel);
+            startSimItem.setEnabled(true);
+            menuBar.revalidate();
+            mainWindow.repaint();
+        });
 
         JMenuItem stopSimItem = new JMenuItem("Stop");
         stopSimItem.addActionListener(e -> {
@@ -98,23 +141,9 @@ public class Main {
         setUpdateRateItem.addActionListener(e -> {
             String updateRateInput = JOptionPane.showInputDialog("Enter the Update Rate of the Simulation");
             updateRate = Integer.parseInt(updateRateInput);
-            statusLabel.setText("Status: Update Rate set to" + updateRate);
+            statusLabel.setText("Status: Update Rate set to " + updateRate);
         });
         simMenu.add(setUpdateRateItem);
-
-        JMenuItem resetSimItem = new JMenuItem("Reset");
-        resetSimItem.addActionListener(e -> {
-            mainWindow.remove(simulationPanel);
-            mainWindow.remove(placeholder);
-            simulationPanel = new SimulationPanel();
-            mainWindow.add(simulationPanel, BorderLayout.CENTER);
-            statusLabel.setText("Status: Simulation Reset");
-            simulationPanel.simulate(updateRate);//Integer.parseInt(JOptionPane.showInputDialog("Time Scale?")));
-            mainWindow.validate();
-            mainWindow.repaint();
-        });
-
-        simMenu.add(resetSimItem);
 
         menuBar.add(simMenu);
 

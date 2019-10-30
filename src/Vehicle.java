@@ -34,22 +34,33 @@ public abstract class Vehicle {
     }
 
     public void move() {
-        speed = currentRoad.getSpeedLimit(); //set speed limit to that of currentRoad
-        if (!currentRoad.getLightsOnRoad().isEmpty() && position + length == currentRoad.getLightsOnRoad().get(0).getPosition() && this.currentRoad.getLightsOnRoad().get(0).getState().equals("red")) {
+        //vehicle in front check:
+        for (Vehicle nextVehicle : currentRoad.getVehiclesOnRoad()) {
+            if (!nextVehicle.equals(this) && nextVehicle.position > this.position && nextVehicle.position <= this.position + (length * 2)) {
+                speed = STOPPED;
+            } else {
+                speed = currentRoad.getSpeedLimit();
+            }
+        }
+        //red light check:
+        if (speed == STOPPED) {
+
+        } else if (!currentRoad.getLightsOnRoad().isEmpty() && position + length + speed >= currentRoad.getLightsOnRoad().get(0).getPosition() && this.currentRoad.getLightsOnRoad().get(0).getState().equals("red")) {
             speed = STOPPED;
         } else {
             speed = currentRoad.getSpeedLimit();
-            if (currentRoad.getLength() == position + length && !currentRoad.getConnectedRoads().isEmpty()) {
+            if (currentRoad.getLength() <= position + length && !currentRoad.getConnectedRoads().isEmpty()) {
                 currentRoad.getVehiclesOnRoad().remove(this);
                 currentRoad = currentRoad.getConnectedRoads().get(NEXT_ROAD_INDEX);
                 currentRoad.getVehiclesOnRoad().add(this);
                 position = START_POSITION;
-            } else if (currentRoad.getLength() > position + length) {
+            } else if (currentRoad.getLength() >= position + length + speed) {
                 position = (position + speed);
             } else {
                 speed = STOPPED;
             }
         }
+
     }
 
 
