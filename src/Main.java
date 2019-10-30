@@ -7,11 +7,11 @@ public class Main {
 
     public static final int WINDOW_WIDTH = 1600;
     public static final int WINDOW_HEIGHT = 1024;
-    public static final int UPDATE_RATE = 2000;
+    public static int updateRate = 2000;
     private static SimulationPanel simulationPanel = new SimulationPanel();
 
     public static void main(String[] args) {
-        simulationPanel.simulate(UPDATE_RATE);//Integer.parseInt(JOptionPane.showInputDialog("Time Scale?"))););
+        simulationPanel.simulate(updateRate);//Integer.parseInt(JOptionPane.showInputDialog("Time Scale?"))););
         // Simulation Window setup:
         JFrame mainWindow = new JFrame("Traffic Simulator");
         mainWindow.setLayout(new BorderLayout());
@@ -94,6 +94,14 @@ public class Main {
         });
         simMenu.add(stopSimItem);
 
+        JMenuItem setUpdateRateItem = new JMenuItem("Update Rate");
+        setUpdateRateItem.addActionListener(e -> {
+            String updateRateInput = JOptionPane.showInputDialog("Enter the Update Rate of the Simulation");
+            updateRate = Integer.parseInt(updateRateInput);
+            statusLabel.setText("Status: Update Rate set to" + updateRate);
+        });
+        simMenu.add(setUpdateRateItem);
+
         JMenuItem resetSimItem = new JMenuItem("Reset");
         resetSimItem.addActionListener(e -> {
             mainWindow.remove(simulationPanel);
@@ -101,7 +109,7 @@ public class Main {
             simulationPanel = new SimulationPanel();
             mainWindow.add(simulationPanel, BorderLayout.CENTER);
             statusLabel.setText("Status: Simulation Reset");
-            simulationPanel.simulate(UPDATE_RATE);//Integer.parseInt(JOptionPane.showInputDialog("Time Scale?")));
+            simulationPanel.simulate(updateRate);//Integer.parseInt(JOptionPane.showInputDialog("Time Scale?")));
             mainWindow.validate();
             mainWindow.repaint();
         });
