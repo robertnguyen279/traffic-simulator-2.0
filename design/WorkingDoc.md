@@ -75,6 +75,8 @@ road.
 ### SimulationPanel
 This class will generate the graphical display of the simulation.
 
+### EditorPanel
+This class will generate the graphical display for the city editor.
 ### SaveFile
 This class will handel the saving of simulation files.
 
