@@ -84,6 +84,7 @@ public class Main {
         exitProgramItem.addActionListener(e -> System.exit(0));
         editMenu.add(exitProgramItem);
 
+        //Simulation Menu:
         JMenu simMenu = new JMenu("Simulation");
         MenuListener simLis = new MenuListener() {
             @Override
@@ -107,6 +108,7 @@ public class Main {
         simMenu.add(loadSimItem);
 
         JMenuItem spawnItem = new JMenuItem("Add Vehicles");
+        spawnItem.setEnabled(false);
         simMenu.add(spawnItem);
 
         JMenuItem startSimItem = new JMenuItem("Start");
@@ -121,13 +123,14 @@ public class Main {
         simMenu.add(startSimItem);
 
         loadSimItem.addActionListener(e -> {
+            statusLabel.setText("Status: Map Loaded!");
             editorPanel.setVisible(false);
             simulationPanel = new SimulationPanel();
             simulationPanel.setScale(SCALE);
             simulationPanel.loadMap(editorPanel.getRoads(), editorPanel.getLights());
             mainWindow.add(simulationPanel);
             startSimItem.setEnabled(true);
-            menuBar.revalidate();
+            spawnItem.setEnabled(true);
             mainWindow.repaint();
         });
 

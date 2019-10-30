@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Random;
 
 public class SimulationPanel extends JPanel {
@@ -16,7 +17,6 @@ public class SimulationPanel extends JPanel {
     private ArrayList<Vehicle> vehicles = new ArrayList<>();
     private ArrayList<TrafficLight> lights;
     private Timer timer;
-    private int carsFinished = 0;
     private Boolean stop = true;
     private Random random = new Random();
     private int spawns = 2;
@@ -75,32 +75,12 @@ public class SimulationPanel extends JPanel {
         infoPanel.add(stateLabel);
         add(infoPanel, BorderLayout.SOUTH);
 
-//        int vehicleSpawns = Integer.parseInt(JOptionPane.showInputDialog("Number of vehicles to spawn?"));
-//            int randomVehicle = random.nextInt(3);
-//            Car newCar = new Car(Integer.toString(i), roads.get(0));
-//            vehicles.add(newCar);
-//            newCar.setPosition(-newCar.getLength()); //spawn off screen
-//            switch (randomVehicle) {
-//                case 0:
-//                    Car newCar = new Car(Integer.toString(i), roads.get(0));
-//                    vehicles.add(newCar);
-//                    newCar.setPosition(-newCar.getLength());
-//                    break;
-//                case 1:
-//                    vehicles.add(new Bus(Integer.toString(i), roads.get(0)));
-//                    break;
-//                case 2:
-//                    vehicles.add(new Motorbike(Integer.toString(i), roads.get(0)));
-//                    break;
-//            }
-//        }
-
         if (timer != null) {
             timer.stop();
         }
         timer = new Timer(updateRate / 60, e -> {
             cycle++;
-            if (carsFinished == vehicles.size()) {
+            if (vehicles.size() == 0) {
                 state = State.FINISHED;
             } else if (stop) {
                 state = State.STOPPED;
@@ -110,7 +90,7 @@ public class SimulationPanel extends JPanel {
             stateLabel.setText("State: " + state);
             vehicleLabel.setText("Vehicles: " + vehicles.size());
             averageSpeedLabel.setText("Average Speed:" + getAverageSpeed());
-            if (carsFinished == vehicles.size() || stop)
+            if (vehicles.size() == 0 || stop)
                 return;
             for (TrafficLight light : lights) {
                 for (Vehicle vehicle : vehicles
@@ -120,14 +100,16 @@ public class SimulationPanel extends JPanel {
                 light.operate(random.nextInt());
                 light.printLightStatus();
             }
-            for (Vehicle vehicle : vehicles) {
+
+            for (Iterator<Vehicle> iterator = vehicles.iterator(); iterator.hasNext(); ) {
+                Vehicle vehicle = iterator.next();
                 vehicle.move();
                 vehicle.printStatus();
-
                 if (vehicle.getCurrentRoad().getConnectedRoads().isEmpty() && (vehicle.getSpeed() == 0)) {
-                    vehicle.setPosition(1000);
+                    iterator.remove();
                 }
             }
+
             System.out.println(cycle);
             if (cycle % numberOfCycles == 0 && vehicles.size() < spawns) {
                 createVehicle();
