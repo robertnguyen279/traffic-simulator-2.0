@@ -35,16 +35,16 @@ public abstract class Vehicle {
 
     public void move() {
         speed = currentRoad.getSpeedLimit(); //set speed limit to that of currentRoad
-        if (!currentRoad.getLightsOnRoad().isEmpty() && position == currentRoad.getLightsOnRoad().get(0).getPosition() && this.currentRoad.getLightsOnRoad().get(0).getState().equals("red")) {
+        if (!currentRoad.getLightsOnRoad().isEmpty() && position + length == currentRoad.getLightsOnRoad().get(0).getPosition() && this.currentRoad.getLightsOnRoad().get(0).getState().equals("red")) {
             speed = STOPPED;
         } else {
             speed = currentRoad.getSpeedLimit();
-            if (currentRoad.getLength() == getPosition() && !currentRoad.getConnectedRoads().isEmpty()) {
+            if (currentRoad.getLength() == position + length && !currentRoad.getConnectedRoads().isEmpty()) {
                 currentRoad.getVehiclesOnRoad().remove(this);
                 currentRoad = currentRoad.getConnectedRoads().get(NEXT_ROAD_INDEX);
                 currentRoad.getVehiclesOnRoad().add(this);
                 position = START_POSITION;
-            } else if (currentRoad.getLength() > position) {
+            } else if (currentRoad.getLength() > position + length) {
                 position = (position + speed);
             } else {
                 speed = STOPPED;
@@ -106,6 +106,10 @@ public abstract class Vehicle {
         this.id = id;
     }
 
+    public Color getColour() {
+        return colour;
+    }
+
     public void draw(Graphics g, int scale) {
         int[] startLocation = getCurrentRoad().getStartLocation();
         int x = (getPosition() + startLocation[0]) * scale;
@@ -113,7 +117,7 @@ public abstract class Vehicle {
         int width = getLength() * scale;
         int height = getBreadth() * scale;
         g.setColor(colour);
-        g.fillRect(x, y, -width, height);
+        g.fillRect(x, y, width, height);
     }
 
     public Color randomColour() {

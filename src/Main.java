@@ -76,7 +76,7 @@ public class Main {
         startSimItem.addActionListener(e -> {
             mainWindow.remove(placeholder);
             mainWindow.add(simulationPanel, BorderLayout.CENTER);
-            simulationPanel.setStop(false);
+            simulationPanel.setStopSim(false);
             statusLabel.setText("Status: Simulation Running");
             mainWindow.validate();
             mainWindow.repaint();
@@ -85,7 +85,7 @@ public class Main {
 
         JMenuItem stopSimItem = new JMenuItem("Stop");
         stopSimItem.addActionListener(e -> {
-            simulationPanel.setStop(true);
+            simulationPanel.setStopSim(true);
             statusLabel.setText("Status: Simulation Stopped");
             mainWindow.validate();
             mainWindow.repaint();
@@ -106,7 +106,6 @@ public class Main {
         simMenu.add(resetSimItem);
 
         menuBar.add(simMenu);
-
 
         mainWindow.setLocationRelativeTo(null);
         mainWindow.setVisible(true);
