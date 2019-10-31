@@ -5,6 +5,7 @@ public class Car extends Vehicle {
         this.id = "car_" + id;
         length = super.getLength();
         breadth = length / 2;
+        position = -length;
     }
 
 }

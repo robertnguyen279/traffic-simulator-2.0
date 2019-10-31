@@ -5,6 +5,7 @@ public class Motorbike extends Vehicle {
         this.id = ("bike_" + id);
         length = super.getLength() / 2;
         breadth = super.getBreadth() / 2;
+        position = -length;
     }
 
 }

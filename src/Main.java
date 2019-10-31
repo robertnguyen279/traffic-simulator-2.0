@@ -7,8 +7,9 @@ public class Main {
 
     public static final int WINDOW_WIDTH = 1600;
     public static final int WINDOW_HEIGHT = 1024;
-    private static int updateRate = 2000;
-    private static SimulationPanel simulationPanel;
+    private static int updateRate = 20000;
+    private static SimulationPanel simulationPanel = new SimulationPanel();
+    private static EditorPanel editorPanel = new EditorPanel();
     private static final int SCALE = 10;
 
     public static void main(String[] args) {
@@ -28,13 +29,6 @@ public class Main {
         JLabel statusLabel = new JLabel("Status: ");
         bottomPanel.add(statusLabel);
         mainWindow.add(bottomPanel, BorderLayout.SOUTH);
-
-        //Editor Panel
-        EditorPanel editorPanel = new EditorPanel();
-        statusLabel.setText("Status: New Map");
-        editorPanel.newMap();
-        editorPanel.setScale(SCALE);
-        mainWindow.add(editorPanel);
 
         //Menu bar:
         JMenuBar menuBar = new JMenuBar();
@@ -62,6 +56,11 @@ public class Main {
 
         JMenuItem newMapItem = new JMenuItem("New");
         newMapItem.addActionListener(e -> {
+            simulationPanel.setVisible(false);
+            editorPanel = new EditorPanel();
+            editorPanel.newMap();
+            editorPanel.setScale(SCALE);
+            mainWindow.add(editorPanel);
             editorPanel.setVisible(true);
             statusLabel.setText("Status: New Map");
             editorPanel.newMap();
@@ -122,18 +121,6 @@ public class Main {
         });
         simMenu.add(startSimItem);
 
-        loadSimItem.addActionListener(e -> {
-            statusLabel.setText("Status: Map Loaded!");
-            editorPanel.setVisible(false);
-            simulationPanel = new SimulationPanel();
-            simulationPanel.setScale(SCALE);
-            simulationPanel.loadMap(editorPanel.getRoads(), editorPanel.getLights());
-            mainWindow.add(simulationPanel);
-            startSimItem.setEnabled(true);
-            spawnItem.setEnabled(true);
-            mainWindow.repaint();
-        });
-
         spawnItem.addActionListener(e -> {
             String spawnInput = JOptionPane.showInputDialog("Total number of Vehicles to spawn:");
             int spawns = Integer.parseInt(spawnInput);
@@ -144,6 +131,7 @@ public class Main {
         });
 
         JMenuItem stopSimItem = new JMenuItem("Stop");
+        stopSimItem.setEnabled(false);
         stopSimItem.addActionListener(e -> {
             simulationPanel.setStopSim(true);
             statusLabel.setText("Status: Simulation Stopped");
@@ -151,6 +139,19 @@ public class Main {
             mainWindow.repaint();
         });
         simMenu.add(stopSimItem);
+
+        loadSimItem.addActionListener(e -> {
+            statusLabel.setText("Status: Map Loaded!");
+            editorPanel.setVisible(false);
+            simulationPanel = new SimulationPanel();
+            simulationPanel.setScale(SCALE);
+            simulationPanel.loadMap(editorPanel.getRoads(), editorPanel.getLights());
+            mainWindow.add(simulationPanel);
+            startSimItem.setEnabled(true);
+            spawnItem.setEnabled(true);
+            stopSimItem.setEnabled(true);
+            mainWindow.repaint();
+        });
 
         JMenuItem setUpdateRateItem = new JMenuItem("Update Rate");
         setUpdateRateItem.addActionListener(e -> {

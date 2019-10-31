@@ -19,7 +19,8 @@ public class SimulationPanel extends JPanel {
     private Timer timer;
     private Boolean stop = true;
     private Random random = new Random();
-    private int spawns = 2;
+    private int vehiclesToSpawn = 2;
+    private int vehiclesSpawned = 0;
     private int numberOfCycles = 20;
 
 
@@ -29,8 +30,8 @@ public class SimulationPanel extends JPanel {
     }
 
     public void setVehicleSpawn(int spawns) {
-        this.spawns = spawns - 1;
-        createVehicle();
+        this.vehiclesToSpawn = spawns - 1;
+        vehicles.add(new Car(Integer.toString(cycle), roads.get(0)));
     }
 
     public void setVehicleSpawnRate(int rate) {
@@ -41,21 +42,16 @@ public class SimulationPanel extends JPanel {
         int randomVehicle = random.nextInt(3);
         switch (randomVehicle) {
             case 0:
-                Car newCar = new Car(Integer.toString(1), roads.get(0));
-                vehicles.add(newCar);
-                newCar.setPosition(-newCar.getLength());
+                vehicles.add(new Car(Integer.toString(cycle), roads.get(0)));
                 break;
             case 1:
-                Bus newBus = new Bus(Integer.toString(1), roads.get(0));
-                vehicles.add(newBus);
-                newBus.setPosition(-newBus.getLength());
+                vehicles.add(new Bus(Integer.toString(cycle), roads.get(0)));
                 break;
             case 2:
-                Motorbike newBike = new Motorbike(Integer.toString(1), roads.get(0));
-                vehicles.add(newBike);
-                newBike.setPosition(-newBike.getLength());
+                vehicles.add(new Motorbike(Integer.toString(cycle), roads.get(0)));
                 break;
         }
+        System.out.println(vehicles.toString());
     }
 
     public void setScale(int scale) {
@@ -91,12 +87,8 @@ public class SimulationPanel extends JPanel {
             vehicleLabel.setText("Vehicles: " + vehicles.size());
             averageSpeedLabel.setText("Average Speed:" + getAverageSpeed());
             if (vehicles.size() == 0 || stop)
-                return;
+                timer.stop();
             for (TrafficLight light : lights) {
-                for (Vehicle vehicle : vehicles
-                ) {
-                    vehicle.printStatus();
-                }
                 light.operate(random.nextInt());
                 light.printLightStatus();
             }
@@ -105,21 +97,25 @@ public class SimulationPanel extends JPanel {
                 Vehicle vehicle = iterator.next();
                 vehicle.move();
                 vehicle.printStatus();
-                if (vehicle.getCurrentRoad().getConnectedRoads().isEmpty() && (vehicle.getSpeed() == 0)) {
+                System.out.println(vehicle.position + vehicle.getLength() + vehicle.getSpeed());
+                System.out.println(vehicle.currentRoad.getLength());
+                System.out.println(vehicle.position + vehicle.getLength() + vehicle.getSpeed() > vehicle.currentRoad.getLength());
+                if (vehicle.position + vehicle.getLength() + vehicle.getSpeed() >= vehicle.currentRoad.getLength() && vehicle.getCurrentRoad().getConnectedRoads().isEmpty() && (vehicle.getSpeed() == 0)) {
+                    vehicle.getCurrentRoad().getVehiclesOnRoad().remove(vehicle);
                     iterator.remove();
                 }
             }
 
             System.out.println(cycle);
-            if (cycle % numberOfCycles == 0 && vehicles.size() < spawns) {
-                createVehicle();
-                System.out.println(vehicles.size());
+            if (cycle % numberOfCycles == 0 && vehiclesSpawned < vehiclesToSpawn) {
+                vehicles.add(new Bus(Integer.toString(cycle), roads.get(0)));
+                //createVehicle();
+                System.out.println("Vehicle ADDED " + vehicles.size());
+                vehiclesSpawned++;
             }
-
             repaint();
         });
         timer.start();
-
     }
 
     public Boolean getStopSim() {
@@ -152,6 +148,8 @@ public class SimulationPanel extends JPanel {
             for (Vehicle vehicle : vehicles
             ) {
                 vehicle.draw(g, scale);
+                System.out.println(vehicle.getLength());
+                System.out.println(vehicle.toString());
             }
         }
 
@@ -161,7 +159,8 @@ public class SimulationPanel extends JPanel {
         }
     }
 
-    public String getAverageSpeed() {
+
+    private String getAverageSpeed() {
         int totalSpeed = 0;
         for (Vehicle vehicle : vehicles) {
             totalSpeed = totalSpeed + vehicle.getSpeed();
@@ -174,7 +173,7 @@ public class SimulationPanel extends JPanel {
         }
     }
 
-    public void setStopSim(Boolean stop) {
+    void setStopSim(Boolean stop) {
         this.stop = stop;
     }
 

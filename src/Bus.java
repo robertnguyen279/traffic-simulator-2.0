@@ -4,6 +4,7 @@ public class Bus extends Vehicle {
         super(currentRoad);
         this.id = ("bus_" + id);
         length = super.getLength() * 3;
+        position = -length;
     }
 
 }

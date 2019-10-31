@@ -10,21 +10,26 @@ public class EditorPanel extends JPanel {
 
 
     public void newMap() {
+        setLayout(new BorderLayout());
+        JPanel sidePanel = new JPanel();
+        sidePanel.setLayout(new GridLayout(10, 0));
+        sidePanel.setBorder(BorderFactory.createLoweredSoftBevelBorder());
+        JButton addRoadButton = new JButton("Add Road");
+        sidePanel.add(addRoadButton);
+        JButton AddLightButton = new JButton("Add Traffic Light");
+        sidePanel.add(AddLightButton);
+        add(sidePanel, BorderLayout.WEST);
+
         roads = new ArrayList<>();
-        int roadSpawns = 2;
-        for (int i = 0; i < roadSpawns; i++) {
-//            int lengthInput = Integer.parseInt(JOptionPane.showInputDialog("Please input length for road_" + i));
-            int lengthInput = 10;
+        int lengthInput = 70;
             int speedLimitInput = 1; // force speed limit to be 1 for prototype.
-            roads.add(new Road(Integer.toString(i), speedLimitInput, lengthInput, new int[]{0, 0}));
-        }
+        roads.add(new Road(Integer.toString(1), speedLimitInput, lengthInput, new int[]{0, 0}));
+        roads.add(new Road(Integer.toString(2), speedLimitInput, lengthInput, new int[]{0, 0}));
+
 
         lights = new ArrayList<>();
-        int lightSpawns = 1;
-        for (int i = 0; i < lightSpawns; i++) {
-            lights.add(new TrafficLight(Integer.toString(i), roads.get(0))); // all created lights will begin on road_0.
-            lights.get(i).printLightStatus();
-        }
+        lights.add(new TrafficLight(Integer.toString(1), roads.get(0))); // all created lights will begin on road_0.
+
 
         // set locations and connections:
         System.out.println("Settings:");
@@ -32,9 +37,7 @@ public class EditorPanel extends JPanel {
         roads.get(1).printRoadInfo();
         roads.get(0).getConnectedRoads().add(roads.get(1)); // connect road_0 to road_1
         System.out.println();
-
     }
-
 
     public ArrayList<Road> getRoads() {
         return roads;
@@ -55,6 +58,11 @@ public class EditorPanel extends JPanel {
         for (Road road : roads
         ) {
             road.draw(g, scale);
+        }
+
+        for (TrafficLight light : lights
+        ) {
+            light.draw(g, scale);
         }
     }
 

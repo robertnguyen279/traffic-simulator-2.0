@@ -10,7 +10,7 @@ public abstract class Vehicle {
     String id; // unique identifier
     int speed; //segments moved per turn
     Road currentRoad; // current Road object
-    private int position; // position on current road
+    int position; // position on current road
     private Color colour;
     private Random random = new Random();
 
@@ -19,7 +19,6 @@ public abstract class Vehicle {
         length = 4;
         breadth = 2;
         speed = 0;
-        position = 0;
         this.currentRoad = currentRoad;
         currentRoad.getVehiclesOnRoad().add(this); //add this vehicle to the road its on.
         colour = randomColour();
@@ -36,8 +35,14 @@ public abstract class Vehicle {
     public void move() {
         //vehicle in front check:
         for (Vehicle nextVehicle : currentRoad.getVehiclesOnRoad()) {
-            if (!nextVehicle.equals(this) && nextVehicle.position > this.position && nextVehicle.position <= this.position + (length * 2)) {
+            System.out.println("this" + this.getPosition());
+            if (!nextVehicle.equals(this)) {
+                System.out.println("next" + nextVehicle.getPosition());
+            }
+
+            if (nextVehicle.position > this.position && nextVehicle.position <= this.position + (length + 4)) {
                 speed = STOPPED;
+                break;
             } else {
                 speed = currentRoad.getSpeedLimit();
             }
@@ -125,8 +130,8 @@ public abstract class Vehicle {
         int[] startLocation = getCurrentRoad().getStartLocation();
         int x = (getPosition() + startLocation[0]) * scale;
         int y = (startLocation[1] * scale) + scale;
-        int width = getLength() * scale;
-        int height = getBreadth() * scale;
+        int width = length * scale;
+        int height = breadth * scale;
         g.setColor(colour);
         g.fillRect(x, y, width, height);
     }

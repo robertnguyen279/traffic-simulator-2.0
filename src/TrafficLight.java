@@ -21,15 +21,16 @@ public class TrafficLight {
     public void operate(int seed) {
         Random random = new Random(seed);
         double probability = random.nextDouble();
-        if (probability > CHANGE_GREEN) {
-            this.setState(GREEN);
+        if (probability > CHANGE && !getRoadAttachedTo().getVehiclesOnRoad().isEmpty()) {
+
+            setState(RED);
         } else {
-            this.setState(RED);
+            setState(GREEN);
         }
     }
 
     public void printLightStatus() {
-        System.out.printf("%s is:%s on %s at position:%s%n", this.getId(), this.getState(), this.getRoadAttachedTo().getId(), this.getPosition());
+        System.out.printf("%s is:%s on %s at position:%s%n", getId(), getState(), this.getRoadAttachedTo().getId(), this.getPosition());
     }
 
     public String getState() {
@@ -65,12 +66,18 @@ public class TrafficLight {
     }
 
     public void draw(Graphics g, int scale) {
+        switch (state) {
+            case "red":
+                g.setColor(Color.red);
+                break;
+            case "green":
+                g.setColor(Color.green);
+        }
         int[] startLocation = getRoadAttachedTo().getStartLocation();
         int x = (getPosition() + startLocation[0]) * scale;
         int y = startLocation[1] * scale;
         int width = scale;
         int height = (getRoadAttachedTo().getWidth() / 2) * scale;
-        g.setColor(Color.ORANGE);
         g.fillRect(x, y, width, height);
     }
 }
