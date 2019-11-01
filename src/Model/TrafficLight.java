@@ -1,8 +1,10 @@
+package Model;
+
 import java.awt.*;
 import java.util.Random;
 
 public class TrafficLight {
-    private static final double CHANGE_GREEN = 0.8; //
+    private static final double CHANGE = 0.4; // more often red
     private static final String GREEN = "green";
     private static final String RED = "red";
     private String id;

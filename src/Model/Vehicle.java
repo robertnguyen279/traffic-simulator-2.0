@@ -1,3 +1,5 @@
+package Model;
+
 import java.awt.*;
 import java.util.Random;
 
@@ -15,7 +17,7 @@ public abstract class Vehicle {
     int breadth;
     String id; // unique identifier
     int speed; //segments moved per turn
-    Road currentRoad; // current Road object
+    Road currentRoad; // current Model.Road object
     int position; // position on current road
     private Color colour;
     private Random random = new Random();

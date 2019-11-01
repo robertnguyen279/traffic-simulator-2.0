@@ -1,3 +1,5 @@
+package Model;
+
 import java.io.BufferedOutputStream;
 import java.io.OutputStream;
 import java.nio.file.FileAlreadyExistsException;
@@ -10,7 +12,7 @@ import static java.nio.file.StandardOpenOption.CREATE;
 public class SaveFile {
     public static void main(String[] args) {
         Path file =
-                Paths.get("src/SaveFile.txt");
+                Paths.get("src/Model.SaveFile.txt");
         String s = "ABCDFGH";
         byte[] data = s.getBytes();
         OutputStream output = null;

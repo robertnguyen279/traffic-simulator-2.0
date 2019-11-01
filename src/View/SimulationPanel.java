@@ -1,3 +1,7 @@
+package View;
+
+import Model.*;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
@@ -98,10 +102,10 @@ public class SimulationPanel extends JPanel {
             }
             for (Iterator<Vehicle> iterator = vehicles.iterator(); iterator.hasNext(); ) {
                 Vehicle vehicle = iterator.next();
-//                vehicle.setLane(Vehicle.Lane.LEFT);
+//                vehicle.setLane(Model.Vehicle.Lane.LEFT);
                 vehicle.move();
                 vehicle.printStatus();
-                if (vehicle.position + vehicle.length + vehicle.speed >= vehicle.currentRoad.getLength() && vehicle.getCurrentRoad().getConnectedRoads().isEmpty() && (vehicle.getSpeed() == 0)) {
+                if (vehicle.getPosition() + vehicle.getLength() + vehicle.getSpeed() >= vehicle.getCurrentRoad().getLength() && vehicle.getCurrentRoad().getConnectedRoads().isEmpty() && (vehicle.getSpeed() == 0)) {
                     vehicle.getCurrentRoad().getVehiclesOnRoad().remove(vehicle);
                     iterator.remove();
                     vehiclesRemoved++;
@@ -182,7 +186,7 @@ public class SimulationPanel extends JPanel {
     }
 
 
-    void setStopSim(Boolean stop) {
+    public void setStopSim(Boolean stop) {
         this.stop = stop;
     }
 

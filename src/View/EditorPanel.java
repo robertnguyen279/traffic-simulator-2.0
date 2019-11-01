@@ -1,3 +1,8 @@
+package View;
+
+import Model.Road;
+import Model.TrafficLight;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
@@ -49,7 +54,7 @@ public class EditorPanel extends JPanel {
                     for (int i = 0; i < connectionOptions.length; i++) {
                         connectionOptions[i] = Integer.toString(i);
                     }
-                    int connectionSelection = JOptionPane.showOptionDialog(null, "Choose Connecting Road:",
+                    int connectionSelection = JOptionPane.showOptionDialog(null, "Choose Connecting Model.Road:",
                             "Connections Selection", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
                             null, connectionOptions, connectionOptions[0]);
                     roads.get(connectionSelection).getConnectedRoads().add(roads.get(roads.size() - 1));

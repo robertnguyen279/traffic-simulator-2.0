@@ -1,9 +1,11 @@
+package Model;
+
 import java.awt.*;
 import java.util.ArrayList;
 
 public class Road {
 
-    enum Orientation {
+    public enum Orientation {
         HORIZONTAL, VERTICAL
     }
 

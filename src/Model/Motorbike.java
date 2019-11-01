@@ -1,3 +1,5 @@
+package Model;
+
 public class Motorbike extends Vehicle {
 
     public Motorbike(String id, Road currentRoad) {

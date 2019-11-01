@@ -1,3 +1,5 @@
+package Model;
+
 public class Car extends Vehicle {
 
     public Car(String id, Road currentRoad) {

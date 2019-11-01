@@ -37,7 +37,7 @@
       </borderColor>
       <textColor reference="8"/>
       <name id="9" justification="1" size="3" underlined="false">
-        <text>Vehicle</text>
+        <text>Model.Vehicle</text>
       </name>
       <attributes id="10" justification="0" size="4" underlined="false">
         <text>- STOPPED : int
@@ -48,7 +48,7 @@
 + breadth : float
 - speed: int
 - position : int
-+ currentRoad : Road
++ currentRoad : Model.Road
 
 
 </text>
@@ -85,7 +85,7 @@
       <borderColor reference="8"/>
       <textColor reference="8"/>
       <name id="23" justification="1" size="3" underlined="false">
-        <text>Road</text>
+        <text>Model.Road</text>
       </name>
       <attributes id="24" justification="0" size="4" underlined="false">
         <text>- id : String
@@ -93,9 +93,9 @@
 - lenght : int
 - startLocation : int[ ]
 - endLocation : int[ ]
-- carsOnRoad : ArrayList&lt;Car&gt;
-- lightsOnRoad : ArrayList&lt;TrafficLight&gt;
-- connectedRoads : ArrayList&lt;Road&gt;</text>
+- carsOnRoad : ArrayList&lt;Model.Car&gt;
+- lightsOnRoad : ArrayList&lt;Model.TrafficLight&gt;
+- connectedRoads : ArrayList&lt;Model.Road&gt;</text>
       </attributes>
       <methods id="25" justification="0" size="4" underlined="false">
         <text>+ printStartLocation() : String
@@ -112,7 +112,7 @@
       <borderColor reference="8"/>
       <textColor reference="8"/>
       <name id="30" justification="1" size="3" underlined="false">
-        <text>TrafficLight</text>
+        <text>Model.TrafficLight</text>
       </name>
       <attributes id="31" justification="0" size="4" underlined="false">
         <text>- CHANGE_GREEN : double
@@ -121,7 +121,7 @@
 - id : String
 - state : String
 - position : int
-- roadAttachedTo : Road</text>
+- roadAttachedTo : Model.Road</text>
       </attributes>
       <methods id="32" justification="0" size="4" underlined="false">
         <text>+ operate(int)
@@ -147,7 +147,7 @@
       </borderColor>
       <textColor reference="38"/>
       <name id="39" justification="1" size="3" underlined="false">
-        <text>Bus</text>
+        <text>Model.Bus</text>
       </name>
       <attributes id="40" justification="0" size="4" underlined="false">
         <text></text>
@@ -165,7 +165,7 @@
       <borderColor reference="38"/>
       <textColor reference="38"/>
       <name id="46" justification="1" size="3" underlined="false">
-        <text>Motorbike</text>
+        <text>Model.Motorbike</text>
       </name>
       <attributes id="47" justification="0" size="4" underlined="false">
         <text></text>
@@ -193,7 +193,7 @@
       </borderColor>
       <textColor reference="54"/>
       <name id="55" justification="1" size="3" underlined="false">
-        <text>SimulationPanel</text>
+        <text>View.SimulationPanel</text>
       </name>
       <attributes id="56" justification="0" size="4" underlined="false">
         <text>(extends JPanel)</text>
@@ -211,7 +211,7 @@
       <borderColor reference="54"/>
       <textColor reference="54"/>
       <name id="62" justification="1" size="3" underlined="false">
-        <text>SaveFile</text>
+        <text>Model.SaveFile</text>
       </name>
       <attributes id="63" justification="0" size="4" underlined="false">
         <text></text>
@@ -239,7 +239,7 @@
       </borderColor>
       <textColor reference="70"/>
       <name id="71" justification="1" size="3" underlined="false">
-        <text>Car</text>
+        <text>Model.Car</text>
       </name>
       <attributes id="72" justification="0" size="4" underlined="false">
         <text></text>
@@ -267,7 +267,7 @@
       </borderColor>
       <textColor reference="79"/>
       <name id="80" justification="1" size="3" underlined="false">
-        <text>EditorPanel</text>
+        <text>View.EditorPanel</text>
       </name>
       <attributes id="81" justification="0" size="4" underlined="false">
         <text>(extendes JPanel)</text>
