@@ -60,56 +60,23 @@ public class Road {
     }
 
 
-    public String getId() {
+    String getId() {
         return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
     }
 
     public int getSpeedLimit() {
         return speedLimit;
     }
 
-    public void setSpeedLimit(int speedLimit) {
-        this.speedLimit = speedLimit;
-    }
-
     public int getLength() {
         return length;
     }
 
-    public void setLength(int length) {
-        this.length = length;
-    }
-
-    public int getWidth() {
+    int getWidth() {
         return width;
     }
 
-    public void setWidth(int width) {
-        this.width = width;
-    }
-
-
-    public String printStartLocation() {
-        return startLocation[0] + "," + startLocation[1];
-    }
-
-    public void setStartLocation(int[] startLocation) {
-        this.startLocation = startLocation;
-    }
-
-    public String printEndLocation() {
-        return endLocation[0] + "," + endLocation[1];
-    }
-
-    public void printRoadInfo() {
-        System.out.printf("%s limit of:%dm/s is %dm long at location:%s to %s%n", this.getId(), this.getSpeedLimit(), this.getLength(), this.printStartLocation(), this.printEndLocation());
-    }
-
-    public void setEndLocation() {
+    private void setEndLocation() {
         if (orientation == Orientation.HORIZONTAL) {
             this.endLocation = new int[]{this.length + this.startLocation[0], this.startLocation[1]}; //only works for horizontal roads;
         } else if (orientation == Orientation.VERTICAL) {
@@ -129,31 +96,16 @@ public class Road {
         return vehiclesOnRoad;
     }
 
-    public void setVehiclesOnRoad(ArrayList<Vehicle> carsOnRoad) {
-        this.vehiclesOnRoad = carsOnRoad;
-    }
-
     public ArrayList<TrafficLight> getLightsOnRoad() {
         return lightsOnRoad;
-    }
-
-    public void setLightsOnRoad(ArrayList<TrafficLight> lightsOnRoad) {
-        this.lightsOnRoad = lightsOnRoad;
     }
 
     public ArrayList<Road> getConnectedRoads() {
         return connectedRoads;
     }
 
-    public void setConnectedRoads(ArrayList<Road> connectedRoads) {
-        this.connectedRoads = connectedRoads;
-    }
-
-    public Orientation getOrientation() {
+    Orientation getOrientation() {
         return orientation;
     }
 
-    public void setOrientation(Orientation orientation) {
-        this.orientation = orientation;
-    }
 }

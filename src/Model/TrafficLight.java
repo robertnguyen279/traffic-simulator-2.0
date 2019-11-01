@@ -39,16 +39,12 @@ public class TrafficLight {
         return state;
     }
 
-    public void setState(String state) {
+    private void setState(String state) {
         this.state = state;
     }
 
     public Road getRoadAttachedTo() {
         return roadAttachedTo;
-    }
-
-    public void setRoadAttachedTo(Road roadAttachedTo) {
-        this.roadAttachedTo = roadAttachedTo;
     }
 
     public int getPosition() {
@@ -57,14 +53,6 @@ public class TrafficLight {
 
     public String getId() {
         return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public void setPosition(int position) {
-        this.position = position;
     }
 
     public void draw(Graphics g, int scale) {
@@ -79,9 +67,8 @@ public class TrafficLight {
             int[] startLocation = getRoadAttachedTo().getStartLocation();
             int x = (getPosition() + startLocation[0]) * scale;
             int y = startLocation[1] * scale;
-            int width = scale;
             int height = (getRoadAttachedTo().getWidth() / 2) * scale;
-            g.fillRect(x, y, width, height);
+            g.fillRect(x, y, scale, height);
         }
         if (roadAttachedTo.getOrientation() == Road.Orientation.VERTICAL) {
             switch (state) {
@@ -95,8 +82,7 @@ public class TrafficLight {
             int x = (startLocation[0] + (getRoadAttachedTo().getWidth() / 2)) * scale;
             int y = (getPosition() + startLocation[1]) * scale;
             int width = (getRoadAttachedTo().getWidth() / 2) * scale;
-            int height = scale;
-            g.fillRect(x, y, width, height);
+            g.fillRect(x, y, width, scale);
         }
     }
 }

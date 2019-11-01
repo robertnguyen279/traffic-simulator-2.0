@@ -5,19 +5,13 @@ import java.util.Random;
 
 public abstract class Vehicle {
 
-    enum Lane {
-        LEFT, RIGHT
-    }
-
-    private Lane lane;
-    static final int STOPPED = 0;
-    private static final int NEXT_ROAD_INDEX = 0;
+    private static final int STOPPED = 0;
     private static final int START_POSITION = 0;
     int length; // number of segments occupied
     int breadth;
     String id; // unique identifier
-    int speed; //segments moved per turn
-    Road currentRoad; // current Model.Road object
+    private int speed; //segments moved per turn
+    private Road currentRoad; // current Model.Road object
     int position; // position on current road
     private Color colour;
     private Random random = new Random();
@@ -54,7 +48,7 @@ public abstract class Vehicle {
             }
         }
         //red light check:
-        if (speed == STOPPED) {
+        if (speed == STOPPED) { //intentionally left empty
         } else {
             if (!currentRoad.getLightsOnRoad().isEmpty() && nextPosition + 1 >= currentRoad.getLightsOnRoad().get(0).getPosition() && this.currentRoad.getLightsOnRoad().get(0).getState().equals("red")) {
                 speed = STOPPED;
@@ -97,7 +91,7 @@ public abstract class Vehicle {
         }
     }
 
-    public Color randomColour() {
+    private Color randomColour() {
         int r = random.nextInt(245 + 1) + 10;
         int g = random.nextInt(245 + 1) + 10;
         int b = random.nextInt(245 + 1) + 10;
@@ -110,27 +104,11 @@ public abstract class Vehicle {
                 getId(), this.getPosition());
     }
 
-    public Lane getLane() {
-        return lane;
-    }
-
-    public void setLane(Lane lane) {
-        this.lane = lane;
-    }
-
-    public static int getNextRoadIndex() {
-        return NEXT_ROAD_INDEX;
-    }
-
-    public static int getStartPosition() {
-        return START_POSITION;
-    }
-
     public int getLength() {
         return length;
     }
 
-    public void setLength(int length) {
+    void setLength(int length) {
         this.length = length;
     }
 
@@ -138,45 +116,22 @@ public abstract class Vehicle {
         return breadth;
     }
 
-    public void setBreadth(int breadth) {
-        this.breadth = breadth;
-    }
-
     public int getSpeed() {
         return speed;
-    }
-
-    public void setSpeed(int speed) {
-        this.speed = speed;
     }
 
     public int getPosition() {
         return position;
     }
 
-    public void setPosition(int position) {
-        this.position = position;
-    }
-
     public Road getCurrentRoad() {
         return currentRoad;
-    }
-
-    public void setCurrentRoad(Road currentRoad) {
-        this.currentRoad = currentRoad;
     }
 
     public String getId() {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public Color getColour() {
-        return colour;
-    }
 
 }
 

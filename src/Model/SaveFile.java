@@ -15,7 +15,7 @@ public class SaveFile {
                 Paths.get("src/Model.SaveFile.txt");
         String s = "ABCDFGH";
         byte[] data = s.getBytes();
-        OutputStream output = null;
+        OutputStream output;
         try {
             output = new BufferedOutputStream(Files.newOutputStream(file, CREATE));
             output.write(data);

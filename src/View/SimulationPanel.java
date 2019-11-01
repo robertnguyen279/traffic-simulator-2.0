@@ -44,7 +44,7 @@ public class SimulationPanel extends JPanel {
         this.numberOfCycles = rate;
     }
 
-    public void createVehicle() {
+    private void createVehicle() {
         int randomVehicle = random.nextInt(3);
         switch (randomVehicle) {
             case 0:
@@ -121,23 +121,6 @@ public class SimulationPanel extends JPanel {
         timer.start();
     }
 
-    public Boolean getStopSim() {
-        return stop;
-    }
-
-
-    public void setRoads(ArrayList<Road> roads) {
-        this.roads = roads;
-    }
-
-    public void setVehicles(ArrayList<Vehicle> vehicles) {
-        this.vehicles = vehicles;
-    }
-
-    public void setLights(ArrayList<TrafficLight> lights) {
-        this.lights = lights;
-    }
-
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -160,7 +143,7 @@ public class SimulationPanel extends JPanel {
         }
     }
 
-    public int getTotalVehicles() {
+    private int getTotalVehicles() {
         return vehiclesSpawned + 1 - vehiclesRemoved;
     }
 
@@ -175,10 +158,6 @@ public class SimulationPanel extends JPanel {
         } else {
             return "0";
         }
-    }
-
-    public int getUpdateRate() {
-        return updateRate;
     }
 
     public void setUpdateRate(int updateRate) {
