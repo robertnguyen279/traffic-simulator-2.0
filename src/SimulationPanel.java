@@ -23,7 +23,7 @@ public class SimulationPanel extends JPanel {
     private int vehiclesSpawned = 0;
     private int vehiclesRemoved = 0;
     private int numberOfCycles = 20;
-    private int updateRate = 6000;
+    private int updateRate = 1000;
 
 
     public void loadMap(ArrayList<Road> roads, ArrayList<TrafficLight> lights) {
