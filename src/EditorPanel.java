@@ -32,11 +32,11 @@ public class EditorPanel extends JPanel {
 
 
         // set locations and connections:
-        System.out.println("Settings:");
         roads.get(1).setStartLocation(new int[]{roads.get(0).getLength(), 0}); // place road_1 to a position at the end of road_0.
-        roads.get(1).printRoadInfo();
         roads.get(0).getConnectedRoads().add(roads.get(1)); // connect road_0 to road_1
-        System.out.println();
+        roads.get(0).setOrientation(Road.Orientation.HORIZONATAL);
+        roads.get(1).setOrientation(Road.Orientation.HORIZONATAL);
+
     }
 
     public ArrayList<Road> getRoads() {

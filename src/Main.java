@@ -7,7 +7,6 @@ public class Main {
 
     public static final int WINDOW_WIDTH = 1600;
     public static final int WINDOW_HEIGHT = 1024;
-    private static int updateRate = 20000;
     private static SimulationPanel simulationPanel = new SimulationPanel();
     private static EditorPanel editorPanel = new EditorPanel();
     private static final int SCALE = 10;
@@ -17,8 +16,7 @@ public class Main {
         JFrame mainWindow = new JFrame("Traffic Simulator");
         mainWindow.setLayout(new BorderLayout());
         mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        mainWindow.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        //mainWindow.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+        mainWindow.setSize(WINDOW_WIDTH, WINDOW_HEIGHT);
 
         //Status Bar
         JPanel bottomPanel = new JPanel();
@@ -113,7 +111,7 @@ public class Main {
         JMenuItem startSimItem = new JMenuItem("Start");
         startSimItem.setEnabled(false);
         startSimItem.addActionListener(e -> {
-            simulationPanel.simulate(updateRate);
+            simulationPanel.simulate();
             statusLabel.setText("Status: Simulation Started");
             simulationPanel.setStopSim(false);
             mainWindow.validate();
@@ -156,8 +154,11 @@ public class Main {
         JMenuItem setUpdateRateItem = new JMenuItem("Update Rate");
         setUpdateRateItem.addActionListener(e -> {
             String updateRateInput = JOptionPane.showInputDialog("Enter the Update Rate of the Simulation");
-            updateRate = Integer.parseInt(updateRateInput);
+            int updateRate = Integer.parseInt(updateRateInput);
+            simulationPanel.setUpdateRate(updateRate);
             statusLabel.setText("Status: Update Rate set to " + updateRate);
+            mainWindow.validate();
+            mainWindow.repaint();
         });
         simMenu.add(setUpdateRateItem);
 

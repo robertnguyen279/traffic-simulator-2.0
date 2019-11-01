@@ -5,8 +5,8 @@ public abstract class Vehicle {
     static final int STOPPED = 0;
     private static final int NEXT_ROAD_INDEX = 0;
     private static final int START_POSITION = 0;
-    static int length; // number of segments occupied
-    static int breadth;
+    int length; // number of segments occupied
+    int breadth;
     String id; // unique identifier
     int speed; //segments moved per turn
     Road currentRoad; // current Road object
@@ -35,11 +35,6 @@ public abstract class Vehicle {
     public void move() {
         //vehicle in front check:
         for (Vehicle nextVehicle : currentRoad.getVehiclesOnRoad()) {
-            System.out.println("this" + this.getPosition());
-            if (!nextVehicle.equals(this)) {
-                System.out.println("next" + nextVehicle.getPosition());
-            }
-
             if (nextVehicle.position > this.position && nextVehicle.position <= this.position + (length + 4)) {
                 speed = STOPPED;
                 break;
@@ -49,7 +44,6 @@ public abstract class Vehicle {
         }
         //red light check:
         if (speed == STOPPED) {
-
         } else if (!currentRoad.getLightsOnRoad().isEmpty() && position + length + speed >= currentRoad.getLightsOnRoad().get(0).getPosition() && this.currentRoad.getLightsOnRoad().get(0).getState().equals("red")) {
             speed = STOPPED;
         } else {
@@ -79,7 +73,7 @@ public abstract class Vehicle {
     }
 
     public void setLength(int length) {
-        Vehicle.length = length;
+        this.length = length;
     }
 
     public int getBreadth() {
@@ -87,7 +81,7 @@ public abstract class Vehicle {
     }
 
     public void setBreadth(int breadth) {
-        Vehicle.breadth = breadth;
+        this.breadth = breadth;
     }
 
     public int getSpeed() {
@@ -130,8 +124,8 @@ public abstract class Vehicle {
         int[] startLocation = getCurrentRoad().getStartLocation();
         int x = (getPosition() + startLocation[0]) * scale;
         int y = (startLocation[1] * scale) + scale;
-        int width = length * scale;
-        int height = breadth * scale;
+        int width = getLength() * scale;
+        int height = getBreadth() * scale;
         g.setColor(colour);
         g.fillRect(x, y, width, height);
     }
