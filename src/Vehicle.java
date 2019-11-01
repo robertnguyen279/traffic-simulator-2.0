@@ -2,6 +2,12 @@ import java.awt.*;
 import java.util.Random;
 
 public abstract class Vehicle {
+
+    enum Lane {
+        LEFT, RIGHT
+    }
+
+    private Lane lane;
     static final int STOPPED = 0;
     private static final int NEXT_ROAD_INDEX = 0;
     private static final int START_POSITION = 0;
@@ -13,6 +19,7 @@ public abstract class Vehicle {
     int position; // position on current road
     private Color colour;
     private Random random = new Random();
+
 
     public Vehicle(Road currentRoad) {
         id = "000";
@@ -33,9 +40,11 @@ public abstract class Vehicle {
     }
 
     public void move() {
+        Random random = new Random();
+        int nextPosition = position + length + speed;
         //vehicle in front check:
         for (Vehicle nextVehicle : currentRoad.getVehiclesOnRoad()) {
-            if (nextVehicle.position > this.position && nextVehicle.position <= this.position + (length + 4)) {
+            if (nextVehicle.position > position && nextVehicle.position <= nextPosition + 4) {
                 speed = STOPPED;
                 break;
             } else {
@@ -44,28 +53,75 @@ public abstract class Vehicle {
         }
         //red light check:
         if (speed == STOPPED) {
-        } else if (!currentRoad.getLightsOnRoad().isEmpty() && position + length + speed >= currentRoad.getLightsOnRoad().get(0).getPosition() && this.currentRoad.getLightsOnRoad().get(0).getState().equals("red")) {
-            speed = STOPPED;
         } else {
-            speed = currentRoad.getSpeedLimit();
-            if (currentRoad.getLength() <= position + length && !currentRoad.getConnectedRoads().isEmpty()) {
-                currentRoad.getVehiclesOnRoad().remove(this);
-                currentRoad = currentRoad.getConnectedRoads().get(NEXT_ROAD_INDEX);
-                currentRoad.getVehiclesOnRoad().add(this);
-                position = START_POSITION;
-            } else if (currentRoad.getLength() >= position + length + speed) {
-                position = (position + speed);
-            } else {
+            if (!currentRoad.getLightsOnRoad().isEmpty() && nextPosition + 1 >= currentRoad.getLightsOnRoad().get(0).getPosition() && this.currentRoad.getLightsOnRoad().get(0).getState().equals("red")) {
                 speed = STOPPED;
+            } else {
+                speed = currentRoad.getSpeedLimit();
+                if (currentRoad.getLength() <= nextPosition && !currentRoad.getConnectedRoads().isEmpty()) {
+                    currentRoad.getVehiclesOnRoad().remove(this);
+                    int nextRoadIndex = random.nextInt(2);
+                    currentRoad = currentRoad.getConnectedRoads().get(nextRoadIndex);
+                    currentRoad.getVehiclesOnRoad().add(this);
+                    position = START_POSITION;
+                } else if (currentRoad.getLength() >= nextPosition) {
+                    position = (position + speed);
+                } else {
+                    speed = STOPPED;
+                }
             }
         }
+    }
 
+    public void draw(Graphics g, int scale) {
+        int xValue = 0;
+        int yValue = 1;
+        if (currentRoad.getOrientation() == Road.Orientation.HORIZONTAL) {
+            int[] startLocation = getCurrentRoad().getStartLocation();
+            int width = getLength() * scale;
+            int height = getBreadth() * scale;
+            int x = (getPosition() + startLocation[xValue]) * scale;
+            int y = (startLocation[yValue] * scale) + scale;
+            g.setColor(colour);
+            g.fillRect(x, y, width, height);
+        } else if (currentRoad.getOrientation() == Road.Orientation.VERTICAL) {
+            int[] startLocation = getCurrentRoad().getStartLocation();
+            int width = getBreadth() * scale;
+            int height = getLength() * scale;
+            int x = (startLocation[xValue] * scale) + ((currentRoad.getWidth() * scale) - (width + scale));
+            int y = (getPosition() + startLocation[yValue]) * scale;
+            g.setColor(colour);
+            g.fillRect(x, y, width, height);
+        }
+    }
+
+    public Color randomColour() {
+        int r = random.nextInt(245 + 1) + 10;
+        int g = random.nextInt(245 + 1) + 10;
+        int b = random.nextInt(245 + 1) + 10;
+        return new Color(r, g, b);
     }
 
 
     public void printStatus() {
         System.out.printf("%s going:%dm/s on %s at position:%s%n", this.getId(), this.getSpeed(), this.getCurrentRoad().
                 getId(), this.getPosition());
+    }
+
+    public Lane getLane() {
+        return lane;
+    }
+
+    public void setLane(Lane lane) {
+        this.lane = lane;
+    }
+
+    public static int getNextRoadIndex() {
+        return NEXT_ROAD_INDEX;
+    }
+
+    public static int getStartPosition() {
+        return START_POSITION;
     }
 
     public int getLength() {
@@ -120,33 +176,5 @@ public abstract class Vehicle {
         return colour;
     }
 
-    public void draw(Graphics g, int scale) {
-        int xValue = 0;
-        int yValue = 1;
-        if (currentRoad.getOrientation() == Road.Orientation.HORIZONTAL) {
-            int[] startLocation = getCurrentRoad().getStartLocation();
-            int width = getLength() * scale;
-            int height = getBreadth() * scale;
-            int x = (getPosition() + startLocation[xValue]) * scale;
-            int y = (startLocation[yValue] * scale) + scale;
-            g.setColor(colour);
-            g.fillRect(x, y, width, height);
-        } else if (currentRoad.getOrientation() == Road.Orientation.VERTICAL) {
-            int[] startLocation = getCurrentRoad().getStartLocation();
-            int width = getBreadth() * scale;
-            int height = getLength() * scale;
-            int x = (startLocation[xValue] * scale) + ((currentRoad.getWidth() * scale) - (width + scale));
-            int y = (getPosition() + startLocation[yValue]) * scale;
-            g.setColor(colour);
-            g.fillRect(x, y, width, height);
-        }
-    }
-
-    public Color randomColour() {
-        int r = random.nextInt(245 + 1) + 10;
-        int g = random.nextInt(245 + 1) + 10;
-        int b = random.nextInt(245 + 1) + 10;
-        return new Color(r, g, b);
-    }
 }
 

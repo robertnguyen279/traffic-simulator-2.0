@@ -9,7 +9,7 @@ public class Main {
     public static final int WINDOW_HEIGHT = 1024;
     private static SimulationPanel simulationPanel = new SimulationPanel();
     private static EditorPanel editorPanel = new EditorPanel();
-    private static final int SCALE = 10;
+    private static final int SCALE = 8;
 
     public static void main(String[] args) {
         // Simulation Window setup:
@@ -55,13 +55,13 @@ public class Main {
         JMenuItem newMapItem = new JMenuItem("New");
         newMapItem.addActionListener(e -> {
             simulationPanel.setVisible(false);
+            mainWindow.remove(editorPanel);
             editorPanel = new EditorPanel();
             editorPanel.newMap();
             editorPanel.setScale(SCALE);
             mainWindow.add(editorPanel);
             editorPanel.setVisible(true);
             statusLabel.setText("Status: New Map");
-            editorPanel.newMap();
             mainWindow.validate();
             mainWindow.repaint();
         });

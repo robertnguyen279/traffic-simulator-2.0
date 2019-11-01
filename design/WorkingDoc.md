@@ -73,15 +73,16 @@ vehicles will stop and not move to the next road. If the light is green the vehi
 road.
 
 ### SimulationPanel
-This class will generate the graphical display of the simulation.
+This class will generate the graphical display of the simulation within the main frame.
 
 ### EditorPanel
-This class will generate the graphical display for the city editor.
+This class will generate the graphical display for the city editor within the main frame.
+
 ### SaveFile
 This class will handel the saving of simulation files.
 
 ### Main
-This class will have the main() method that will contain the simulation loop.
+This class will have the main() method that will Call the simulation and .
 All the objects needed for the simulation will be created here; creating roads, a car and a traffic light. Locations 
 for roads and their connection will also be set here. For this version of the program the user will only have control 
 over the length of the road and the speed the simulation runs at. The simulation will run, moving the car and operating 

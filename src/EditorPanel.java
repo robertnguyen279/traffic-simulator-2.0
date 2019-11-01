@@ -1,5 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 public class EditorPanel extends JPanel {
@@ -10,32 +12,55 @@ public class EditorPanel extends JPanel {
 
 
     public void newMap() {
-        setLayout(new BorderLayout());
-        JPanel sidePanel = new JPanel();
-        sidePanel.setLayout(new GridLayout(10, 0));
-        sidePanel.setBorder(BorderFactory.createLoweredSoftBevelBorder());
-        JButton addRoadButton = new JButton("Add Road");
-        sidePanel.add(addRoadButton);
-        JButton AddLightButton = new JButton("Add Traffic Light");
-        sidePanel.add(AddLightButton);
-        add(sidePanel, BorderLayout.WEST);
-
         roads = new ArrayList<>();
-        int lengthInput = 70;
-            int speedLimitInput = 1; // force speed limit to be 1 for prototype.
-        roads.add(new Road(Integer.toString(1), speedLimitInput, lengthInput, new int[]{0, 0}));
-        roads.add(new Road(Integer.toString(2), speedLimitInput, lengthInput, new int[]{0, 0}));
-
-
         lights = new ArrayList<>();
-        lights.add(new TrafficLight(Integer.toString(1), roads.get(0))); // all created lights will begin on road_0.
+        MouseAdapter mouseLis = new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int xValue = e.getX() / scale;
+                int yValue = e.getY() / scale;
+                System.out.println("X: " + xValue);
+                System.out.println("Y: " + yValue);
+                if (roads.size() == 0) {
+                    if (e.getY() < 10) {
+                        roads.add(new Road(Integer.toString(roads.size()), 1, 50, new int[]{xValue, 0}
+                                , Road.Orientation.VERTICAL));
+                    } else if (e.getX() < 10) {
+                        roads.add(new Road(Integer.toString(roads.size()), 1, 50, new int[]{0, yValue}
+                                , Road.Orientation.HORIZONTAL));
+                    }
 
 
-        // set locations and connections:
-        roads.get(1).setStartLocation(new int[]{roads.get(0).getLength(), 0}); // place road_1 to a position at the end of road_0.
-        roads.get(0).getConnectedRoads().add(roads.get(1)); // connect road_0 to road_1
-        roads.get(0).setOrientation(Road.Orientation.HORIZONTAL);
-        roads.get(1).setOrientation(Road.Orientation.VERTICAL);
+                } else {
+                    String[] orientationOptions = {"Horizontal", "Vertical"};
+                    int orientationSelection = JOptionPane.showOptionDialog(null, "Choose Orientation:",
+                            "Orientation Selection", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
+                            null, orientationOptions, roads);
+                    switch (orientationSelection) {
+                        case 0:
+                            roads.add(new Road(Integer.toString(roads.size()), 1, 50, new int[]{xValue,
+                                    yValue}, Road.Orientation.HORIZONTAL));
+                            break;
+                        case 1:
+                            roads.add(new Road(Integer.toString(roads.size()), 1, 50, new int[]{xValue,
+                                    yValue}, Road.Orientation.VERTICAL));
+                    }
+                    String[] connectionOptions = new String[30];
+                    for (int i = 0; i < connectionOptions.length; i++) {
+                        connectionOptions[i] = Integer.toString(i);
+                    }
+                    int connectionSelection = JOptionPane.showOptionDialog(null, "Choose Connecting Road:",
+                            "Connections Selection", JOptionPane.DEFAULT_OPTION, JOptionPane.INFORMATION_MESSAGE,
+                            null, connectionOptions, connectionOptions[0]);
+                    roads.get(connectionSelection).getConnectedRoads().add(roads.get(roads.size() - 1));
+                }
+                for (Road road : roads) {
+                    lights.add(new TrafficLight("1", road));
+                }
+                repaint();
+            }
+        };
+        addMouseListener(mouseLis);
 
     }
 
@@ -55,14 +80,31 @@ public class EditorPanel extends JPanel {
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
 
-        for (Road road : roads
-        ) {
-            road.draw(g, scale);
+        if (roads.size() == 0) {
+            g.setColor(Color.YELLOW);
+            g.fillRect(0, 0, this.getWidth(), 10);
+            g.fillRect(0, 0, 10, this.getHeight());
         }
 
-        for (TrafficLight light : lights
-        ) {
-            light.draw(g, scale);
+        if (!roads.isEmpty()) {
+            for (Road road : roads
+            ) {
+                road.draw(g, scale);
+//                g.setColor(Color.YELLOW);
+//                int[] location = road.getEndLocation();
+//                int x = location[0];
+//                int y = location[1];
+//                int width = 10 * scale;
+//                int height = road.getWidth() * scale;
+//                g.fillRect(x,y,width,height);
+            }
+        }
+
+        if (!lights.isEmpty()) {
+            for (TrafficLight light : lights
+            ) {
+                light.draw(g, scale);
+            }
         }
     }
 

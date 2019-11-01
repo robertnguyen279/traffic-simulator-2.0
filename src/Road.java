@@ -19,17 +19,14 @@ public class Road {
     private ArrayList<Road> connectedRoads = new ArrayList<>();
 
 
-    public Road(String id, int speedLimit, int length, int[] startLocation) {
+    public Road(String id, int speedLimit, int length, int[] startLocation, Orientation orientation) {
         this.id = "road_" + id;
         this.speedLimit = speedLimit;
         this.length = length;
         width = 8;
+        this.orientation = orientation;
         this.startLocation = startLocation;
-        this.endLocation = new int[]{this.length + this.startLocation[0], 0}; //only works for horizontal roads;
-    }
-
-    public void connectRoad(Road road) {
-        connectedRoads.add(road);
+        setEndLocation();
     }
 
     public void draw(Graphics g, int scale) {
@@ -42,10 +39,10 @@ public class Road {
             g.setColor(Color.darkGray);
             g.fillRect(x, y, width, height);
             //Center Lines
-//            g.setColor(Color.white);
-//            g.fillRect(x, y + (height / 2) - scale / 6, width, scale / 6);
-//            g.fillRect(x, y + (height / 2) + scale / 6, width, scale / 6);
-        } else {
+            g.setColor(Color.white);
+            g.fillRect(x, y + (height / 2) - scale / 6, width, scale / 6);
+            g.fillRect(x, y + (height / 2) + scale / 6, width, scale / 6);
+        } else if (orientation == Orientation.VERTICAL) {
             int[] startLocation = this.startLocation;
             int x = startLocation[0] * scale;
             int y = startLocation[1] * scale;
@@ -54,9 +51,9 @@ public class Road {
             g.setColor(Color.darkGray);
             g.fillRect(x, y, width, height);
 //            //Center Lines
-//            g.setColor(Color.white);
-//            g.fillRect(x, y + (height / 2) - scale / 6, scale / 6, height );
-//            g.fillRect(x, y + (height / 2) + scale / 6, scale / 6, height);
+            g.setColor(Color.white);
+            g.fillRect(x + (width / 2) - scale / 6, y, scale / 6, height);
+            g.fillRect(x + (width / 2) + scale / 6, y, scale / 6, height);
         }
     }
 
@@ -100,7 +97,6 @@ public class Road {
 
     public void setStartLocation(int[] startLocation) {
         this.startLocation = startLocation;
-        this.endLocation = new int[]{this.length + this.startLocation[0], 0}; //only works for horizontal roads;
     }
 
     public String printEndLocation() {
@@ -111,8 +107,12 @@ public class Road {
         System.out.printf("%s limit of:%dm/s is %dm long at location:%s to %s%n", this.getId(), this.getSpeedLimit(), this.getLength(), this.printStartLocation(), this.printEndLocation());
     }
 
-    public void setEndLocation(int[] endLocation) {
-        this.endLocation = endLocation;
+    public void setEndLocation() {
+        if (orientation == Orientation.HORIZONTAL) {
+            this.endLocation = new int[]{this.length + this.startLocation[0], this.startLocation[1]}; //only works for horizontal roads;
+        } else if (orientation == Orientation.VERTICAL) {
+            this.endLocation = new int[]{this.startLocation[1], this.length + this.startLocation[0]};
+        }
     }
 
     public int[] getStartLocation() {

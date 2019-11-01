@@ -10,7 +10,6 @@ public class SimulationPanel extends JPanel {
         STOPPED, RUNNING, FINISHED
     }
 
-    static int cycle = 0;
     private State state = State.STOPPED;
     private int scale;
     private ArrayList<Road> roads;
@@ -19,6 +18,7 @@ public class SimulationPanel extends JPanel {
     private Timer timer;
     private Boolean stop = true;
     private Random random = new Random();
+    private static int cycle = 0;
     private int vehiclesToSpawn = 2;
     private int vehiclesSpawned = 0;
     private int vehiclesRemoved = 0;
@@ -87,18 +87,21 @@ public class SimulationPanel extends JPanel {
             stateLabel.setText("State: " + state);
             vehicleLabel.setText("Vehicles: " + getTotalVehicles());
             averageSpeedLabel.setText("Average Speed:" + getAverageSpeed());
-            if (vehicles.size() == 0 || stop)
+            if (vehicles.size() == 0 || stop) {
                 timer.stop();
-            for (TrafficLight light : lights) {
-                light.operate(random.nextInt());
-                light.printLightStatus();
             }
-
+            if (cycle % 30 == 0) { //light operates every x tics
+                for (TrafficLight light : lights) {
+                    light.operate(random.nextInt());
+                    light.printLightStatus();
+                }
+            }
             for (Iterator<Vehicle> iterator = vehicles.iterator(); iterator.hasNext(); ) {
                 Vehicle vehicle = iterator.next();
+//                vehicle.setLane(Vehicle.Lane.LEFT);
                 vehicle.move();
                 vehicle.printStatus();
-                if (vehicle.position + vehicle.getLength() + vehicle.getSpeed() >= vehicle.currentRoad.getLength() && vehicle.getCurrentRoad().getConnectedRoads().isEmpty() && (vehicle.getSpeed() == 0)) {
+                if (vehicle.position + vehicle.length + vehicle.speed >= vehicle.currentRoad.getLength() && vehicle.getCurrentRoad().getConnectedRoads().isEmpty() && (vehicle.getSpeed() == 0)) {
                     vehicle.getCurrentRoad().getVehiclesOnRoad().remove(vehicle);
                     iterator.remove();
                     vehiclesRemoved++;
