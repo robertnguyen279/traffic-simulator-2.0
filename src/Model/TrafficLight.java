@@ -1,7 +1,6 @@
 package Model;
 
 import java.awt.*;
-import java.util.Random;
 
 public class TrafficLight {
     private static final double CHANGE = 0.4; // more often red
@@ -11,8 +10,10 @@ public class TrafficLight {
     private String state;
     private int position;
     private Road roadAttachedTo;
+    private int signalCycleTime;
+    private int countDown;
 
-    public TrafficLight(String id, Road road) {
+    public TrafficLight(String id, Road road, int signalCycleTime) {
         this.id = "light_" + id;
         state = RED;
         this.roadAttachedTo = road;
@@ -20,15 +21,12 @@ public class TrafficLight {
         this.roadAttachedTo.getLightsOnRoad().add(this); // adds this light to the road it belongs to.
     }
 
-    public void operate(int seed) {
-        Random random = new Random(seed);
-        double probability = random.nextDouble();
-        //only changes if vehicles are present:
-        if (probability > CHANGE && !getRoadAttachedTo().getVehiclesOnRoad().isEmpty()) {
-            setState(RED);
-        } else {
-            setState(GREEN);
+    public void operate() {
+        if (countDown == 0) {
+            countDown = signalCycleTime;
+            setState(state.equals(RED) ? GREEN : RED);
         }
+        countDown--;
     }
 
     public void printLightStatus() {

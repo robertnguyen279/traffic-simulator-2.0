@@ -19,6 +19,7 @@ public class SimulationPanel extends JPanel {
     private ArrayList<Road> roads;
     private ArrayList<Vehicle> vehicles = new ArrayList<>();
     private ArrayList<TrafficLight> lights;
+    private ArrayList<PedestrianCrossing> pedestrianCrossings;
     private Timer timer;
     private Boolean stop = true;
     private Random random = new Random();
@@ -30,9 +31,10 @@ public class SimulationPanel extends JPanel {
     private int updateRate = 1000;
 
 
-    public void loadMap(ArrayList<Road> roads, ArrayList<TrafficLight> lights) {
+    public void loadMap(ArrayList<Road> roads, ArrayList<TrafficLight> lights, ArrayList<PedestrianCrossing> pedestrianCrossings) {
         this.roads = roads;
         this.lights = lights;
+        this.pedestrianCrossings = pedestrianCrossings;
     }
 
     public void setVehicleSpawn(int spawns) {
@@ -94,10 +96,15 @@ public class SimulationPanel extends JPanel {
             if (vehicles.size() == 0 || stop) {
                 timer.stop();
             }
-            if (cycle % 30 == 0) { //light operates every x tics
+            if (cycle % 30 == 0) { //light and pedestriancrossing operates every x tics
                 for (TrafficLight light : lights) {
-                    light.operate(random.nextInt());
+                    light.operate();
                     light.printLightStatus();
+                }
+
+                for (PedestrianCrossing pedestrianCrossing: pedestrianCrossings) {
+                    pedestrianCrossing.launch();
+                    pedestrianCrossing.printStatus();
                 }
             }
             for (Iterator<Vehicle> iterator = vehicles.iterator(); iterator.hasNext(); ) {
@@ -140,6 +147,11 @@ public class SimulationPanel extends JPanel {
         for (TrafficLight light : lights
         ) {
             light.draw(g, scale);
+        }
+
+        for (PedestrianCrossing pedestrianCrossing : pedestrianCrossings
+        ) {
+            pedestrianCrossing.draw(g, scale);
         }
     }
 

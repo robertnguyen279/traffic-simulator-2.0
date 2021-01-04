@@ -2,6 +2,7 @@ package View;
 
 import Model.Road;
 import Model.TrafficLight;
+import Model.PedestrianCrossing;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,12 +14,14 @@ public class EditorPanel extends JPanel {
 
     private ArrayList<Road> roads;
     private ArrayList<TrafficLight> lights;
+    private ArrayList<PedestrianCrossing> pedestrianCrossings;
     private int scale;
 
 
     public void newMap() {
         roads = new ArrayList<>();
         lights = new ArrayList<>();
+        pedestrianCrossings = new ArrayList<>();
         MouseAdapter mouseLis = new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -60,7 +63,8 @@ public class EditorPanel extends JPanel {
                     roads.get(connectionSelection).getConnectedRoads().add(roads.get(roads.size() - 1));
                 }
                 for (Road road : roads) {
-                    lights.add(new TrafficLight("1", road));
+                    pedestrianCrossings.add(new PedestrianCrossing("1", 3, road));
+                    lights.add(new TrafficLight("1", road, 3)); // set default signal time to 3
                 }
                 repaint();
             }
@@ -75,6 +79,10 @@ public class EditorPanel extends JPanel {
 
     public ArrayList<TrafficLight> getLights() {
         return lights;
+    }
+
+    public ArrayList<PedestrianCrossing> getPedestrianCrossings() {
+        return pedestrianCrossings;
     }
 
     public void setScale(int scale) {
@@ -95,13 +103,13 @@ public class EditorPanel extends JPanel {
             for (Road road : roads
             ) {
                 road.draw(g, scale);
-//                g.setColor(Color.YELLOW);
-//                int[] location = road.getEndLocation();
-//                int x = location[0];
-//                int y = location[1];
-//                int width = 10 * scale;
-//                int height = road.getWidth() * scale;
-//                g.fillRect(x,y,width,height);
+                g.setColor(Color.YELLOW);
+                int[] location = road.getEndLocation();
+                int x = location[0];
+                int y = location[1];
+                int width = 10 * scale;
+                int height = road.getWidth() * scale;
+                g.fillRect(x,y,width,height);
             }
         }
 

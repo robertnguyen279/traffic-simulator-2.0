@@ -40,6 +40,8 @@ public abstract class Vehicle {
         int nextPosition = position + length + speed;
         //vehicle in front check:
         for (Vehicle nextVehicle : currentRoad.getVehiclesOnRoad()) {
+
+
             if (nextVehicle.position > position && nextVehicle.position <= nextPosition + 4) {
                 speed = STOPPED;
                 break;
@@ -47,10 +49,13 @@ public abstract class Vehicle {
                 speed = currentRoad.getSpeedLimit();
             }
         }
-        //red light check:
+        //red light and pedestrian crossing check:
         if (speed == STOPPED) { //intentionally left empty
         } else {
-            if (!currentRoad.getLightsOnRoad().isEmpty() && nextPosition + 1 >= currentRoad.getLightsOnRoad().get(0).getPosition() && this.currentRoad.getLightsOnRoad().get(0).getState().equals("red")) {
+            boolean isTrafficLightRedWhenCarCome = !this.currentRoad.getLightsOnRoad().isEmpty() && this.getPosition() == this.currentRoad.getLightsOnRoad().get(0).getPosition() - 1 && this.currentRoad.getLightsOnRoad().get(0).getState().equals("red");
+            boolean isPedestrianWalkedWhenCarCome = (this.currentRoad.getPedestrianCrossing() != null) && this.currentRoad.getPedestrianCrossing().getLocation()[0] - 1 == this.getPosition() && this.currentRoad.getPedestrianCrossing().getStatus().equals("walked"); // Vehicles must stop in front of crossing.
+
+            if (isPedestrianWalkedWhenCarCome || isTrafficLightRedWhenCarCome) {
                 speed = STOPPED;
             } else {
                 speed = currentRoad.getSpeedLimit();

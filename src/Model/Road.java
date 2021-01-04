@@ -19,6 +19,7 @@ public class Road {
     private ArrayList<Vehicle> vehiclesOnRoad = new ArrayList<>();
     private ArrayList<TrafficLight> lightsOnRoad = new ArrayList<>();
     private ArrayList<Road> connectedRoads = new ArrayList<>();
+    private PedestrianCrossing pedestrianCrossing;
 
 
     public Road(String id, int speedLimit, int length, int[] startLocation, Orientation orientation) {
@@ -72,7 +73,7 @@ public class Road {
         return length;
     }
 
-    int getWidth() {
+    public int getWidth() {
         return width;
     }
 
@@ -106,6 +107,14 @@ public class Road {
 
     Orientation getOrientation() {
         return orientation;
+    }
+
+    public PedestrianCrossing getPedestrianCrossing() {
+        return pedestrianCrossing;
+    }
+
+    public void setPedestrianCrossing(PedestrianCrossing pedestrianCrossing) {
+        this.pedestrianCrossing = pedestrianCrossing;
     }
 
 }
